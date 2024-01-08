@@ -2,11 +2,15 @@ from manim import *
 from Element import Element
 
 class Array(VGroup):
-    def __init__(self,*values, side_length=1.5, gap=0,**kwargs):
+    def __init__(self,*values, side_length=1.5, gap=0, parent=None, **kwargs):
         super().__init__(**kwargs)
         self.array = [*values]
         self.elements = [Element(value, side_length) for value in values]
         self.gap = gap
+        
+        #Used in Recursion
+        self.parent = parent
+        self.children = []
 
     def initialize(self):
         for index, element in enumerate(self.elements):
