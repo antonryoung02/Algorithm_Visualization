@@ -5,4 +5,5 @@ class Element(VGroup):
         super().__init__(**kwargs)
         self.square = Square(side_length)
         self.text = Text(str(value))
+        self.value = value
         self.add(self.square, self.text)

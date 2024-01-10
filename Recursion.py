@@ -1,29 +1,25 @@
 from manim import *
-from Array import Array
+from RecursiveArray import RecursiveArray
 
 class Recursion(VGroup):
-    def __init__(self, array, branching_factor=2, subproblem_size=2, **kwargs):
+    def __init__(self, scene, array, branching_factor=2, subproblem_size=2, **kwargs):
         super().__init__(**kwargs)
         self.array = array
         self.branching_factor = branching_factor
-        self.recursive_tree = {}
         self.level_spacing = 1.5  # Vertical spacing between levels
         self.subproblem_spacing = 1.5 # Base horizontal spacing between subproblems
-        self.top_offset = 1
         self.subproblem_size = subproblem_size
         self.root = None
         self.current_subproblem = None
     
-    def initialize(self):
+    def initial_animations(self):
         init_animations = self.divide(None, 0, 0, len(self.array))
         return init_animations
     
     def divide(self, parent, level, i, j):
-        if str(level) not in self.recursive_tree:
-            self.recursive_tree[str(level)] = []
 
-        subproblem = Array(*self.array[i:j], side_length=0.8, parent=parent)
-        divide_animations = subproblem.initialize()
+        subproblem = RecursiveArray(self.array[i:j], side_length=0.8, parent=parent)
+        divide_animations = subproblem.initial_animations()
 
         if parent is not None:
             parent.children.append(subproblem)
@@ -37,14 +33,15 @@ class Recursion(VGroup):
         self.add(subproblem)
         print(f"Subproblem: {subproblem.submobjects}")
 
-        subproblem.move_to(self.calculate_position(i, j, level))
-        if parent is not None: 
-            divide_animations.append(FadeIn(CurvedArrow(parent.get_bottom(), subproblem.get_top(), angle=0)))
+        subproblem.move_to(self.calculate_position(level))
+        if parent is not None:
+            parent_arrow = CurvedArrow(parent.get_bottom(), subproblem.get_top(), angle=0)
+            arrow_animation = subproblem.set_parent_arrow(parent_arrow)
+            divide_animations.append(arrow_animation)
 
-        self.recursive_tree[str(level)].append(subproblem)
         return divide_animations
 
-    def calculate_position(self, i, j, level):
+    def calculate_position(self, level):
         parent = self.current_subproblem.parent
         print(parent)
         if parent is None:
@@ -63,16 +60,11 @@ class Recursion(VGroup):
         y = parent.get_center()[1] - self.level_spacing
 
         return np.array([x, y, 0])
-    # def calculate_position(self, level, index, i, j):
-    #     num_subproblems = self.branching_factor ** level
-
-    #     if level == 0:
-    #         x = 0  # Center the root
-    #     else:
-    #         # Estimating width of each subproblem (assuming uniform width for simplicity)
-    #         total_width = self.subproblem_spacing * (num_subproblems - 1) + (len(self.array)-1) * ((self.branching_factor/self.subproblem_size))**level
-    #         start_x = -total_width / 2
-    #         x = 0.5 + start_x + index * self.subproblem_spacing + 0.8*((i+j)// 2)
-
-    #     y = 3 - 1.5 * (self.level_spacing * level)
-    #     return np.array([x, y, 0])
+    
+    def traverse_up(self):
+        parent = self.current_subproblem.parent
+        if parent:
+            new_arrow = CurvedArrow(self.current_subproblem.get_top(), parent.get_bottom(),angle=0)
+            arrow_animation = self.current_subproblem.set_parent_arrow(new_arrow)
+            self.current_subproblem = parent
+            return arrow_animation
