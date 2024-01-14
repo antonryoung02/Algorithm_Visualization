@@ -3,6 +3,7 @@ from Array import Array
 from Element import Element
 
 
+# Fix: Not returning animations
 # Think about adding attributes for arrow and .next in element so that arrows aren't in the array and are easily accessible
 class LinkedList(Array):
     def __init__(self, scene, array, side_length=1.5, arrow_length=0.6):
@@ -105,7 +106,7 @@ class LinkedList(Array):
         if index == 0:
             new_element.move_to(self[0])
             new_arrow.next_to(new_element, RIGHT, buff=0)
-            shift_animations = self.shift_at_index(
+            shift_animations = self._shift_at_index(
                 index * 2, self.side_length + self.arrow_length
             )
             self.submobjects = [new_element, new_arrow] + self.submobjects
@@ -137,7 +138,7 @@ class LinkedList(Array):
             )
             insert_animations.append(FadeIn(new_arrow))
 
-            shift_animations = self.shift_at_index(
+            shift_animations = self._shift_at_index(
                 index * 2, self.side_length + self.arrow_length
             )
             insertion_index = (

@@ -3,18 +3,29 @@ from Array import Array
 from LinkedList import LinkedList
 from Pointer import Pointer
 from Recursion import Recursion
+from RecursiveElement import RecursiveElement
 
 
 # manim -pql main.py ArrayScene
+class RecursiveElementTestScene(Scene):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def construct(self):
+        data = {"variable name": "value"}
+        recursive_element = RecursiveElement(data)
+        self.play(recursive_element.initialize())
+        self.wait(0.5)
+
+
 class RecursionTestScene(Scene):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.animation_groups = []
 
     def construct(self):
         arr = [3, 1, 4, 8, 12, 9, 2]
         recursion = Recursion(self, arr)
-        init_animation = recursion.initial_animations()
+        init_animation = recursion.initialize_array()
         self.play(init_animation)
         self.wait(1)
 
@@ -23,9 +34,8 @@ class RecursionTestScene(Scene):
 
     def recursive_traverse(self, recursion, i, j, level=0):
         if j - i <= 1:  # Base case, adjust as needed
-            completed_animation = recursion.current_subproblem.show_completed()
             traverse_up_animation = recursion.traverse_up()
-            self.play(completed_animation, traverse_up_animation)
+            self.play(traverse_up_animation)
             return
         midpt = (i + j) // 2
         left_animations = recursion.divide_array(
@@ -41,22 +51,23 @@ class RecursionTestScene(Scene):
         self.recursive_traverse(recursion, midpt, j, level + 1)
 
         # Inductive step solution animations.
+        print(f"subp: {recursion.current_subproblem}")
         left_child = recursion.current_subproblem.children[0]
         right_child = recursion.current_subproblem.children[1]
         left_pointer = Pointer(
-            self,
-            left_child.elements,
-            0,
-            "l",
+            scene=self,
+            elements=left_child.elements,
+            initial_position=0,
+            name="l",
             scale=0.3,
             color="#336FD2",
             show_text=False,
         )
         right_pointer = Pointer(
-            self,
-            right_child.elements,
-            0,
-            "r",
+            scene=self,
+            elements=right_child.elements,
+            initial_position=0,
+            name="r",
             scale=0.3,
             color="#336FD2",
             show_text=False,
@@ -73,13 +84,13 @@ class RecursionTestScene(Scene):
         while l < len(left_child.elements) and r < len(right_child.elements):
             self.play(
                 recursion.compare_size_in_different_arrays(
-                    left_child, right_child, l, r
+                    array1=left_child, array2=right_child, index1=l, index2=r
                 )
             )
             if left_child.elements[l].value < right_child.elements[r].value:
                 self.play(
                     recursion.current_subproblem.change_value(
-                        l + r, left_child.elements[l].value
+                        index=l + r, new_val=left_child.elements[l].value
                     )
                 )
                 l += 1
@@ -95,7 +106,7 @@ class RecursionTestScene(Scene):
 
         if l < len(left_child.elements):
             while l < len(left_child.elements):
-                self.play(left_child.compare_size(l, -9999))
+                self.play(left_child.compare_size(l, 9999))
                 self.play(
                     recursion.current_subproblem.change_value(
                         l + r, left_child.elements[l].value
@@ -105,7 +116,7 @@ class RecursionTestScene(Scene):
                 self.play(left_pointer.update_position(l))
         elif r < len(right_child.elements):
             while r < len(right_child.elements):
-                self.play(right_child.compare_size(r, -9999))
+                self.play(right_child.compare_size(r, 9999))
                 self.play(
                     recursion.current_subproblem.change_value(
                         l + r, right_child.elements[r].value
@@ -116,9 +127,8 @@ class RecursionTestScene(Scene):
         self.play(left_pointer.delete(), right_pointer.delete())
 
         if recursion.current_subproblem.parent:
-            completed_animation = recursion.current_subproblem.show_completed()
             traverse_up_animation = recursion.traverse_up()
-            self.play(completed_animation, traverse_up_animation)
+            self.play(traverse_up_animation)
         else:
             self.play(recursion.current_subproblem.show_completed())
         return
@@ -181,11 +191,10 @@ class ArrayTestScene(Scene):
 
         i_pointer = Pointer(self, array, 0, "i", color="#990000")
         j_pointer = Pointer(self, array, 1, "j", color="#000099")
-        i_pointer.initialize()
-        j_pointer.initialize()
+        self.play(i_pointer.initialize())
+        self.play(j_pointer.initialize())
 
         swapped = True
-        
 
         i = 0
         while swapped:
@@ -200,8 +209,8 @@ class ArrayTestScene(Scene):
                     j_pointer.array_changed(array.elements)
                     swapped = True
                 j += 1
-                j_pointer.update_position(j)
+                self.play(j_pointer.update_position(j))
             i += 1
-            i_pointer.update_position(i)
+            self.play(i_pointer.update_position(i))
             j = i + 1
-            j_pointer.update_position(j)
+            self.play(j_pointer.update_position(j))

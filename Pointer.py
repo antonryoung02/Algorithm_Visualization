@@ -1,17 +1,18 @@
 from manim import *
 import warnings
+from Element import Element
 
 
 class Pointer(VGroup):
     def __init__(
         self,
-        scene,
-        elements,
-        initial_position,
-        name,
-        scale=0.5,
-        color="#FF0000",
-        show_text=True,
+        scene: Scene,
+        elements: list[Element],
+        initial_position: int,
+        name: str,
+        scale: float = 0.5,
+        color: str = "#FF0000",
+        show_text: bool = True,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -25,7 +26,8 @@ class Pointer(VGroup):
         self.size = scale
         self.show_text = show_text
 
-    def initialize(self):
+    def initialize(self) -> AnimationGroup:
+        """Initializes visual and text, returns init animations"""
         self.pointer_visual = (
             Arrow(DOWN, UP, color=self.color)
             .scale(self.size)
@@ -41,7 +43,10 @@ class Pointer(VGroup):
         animations.append(FadeIn(self.pointer_visual))
         return AnimationGroup(*animations)
 
-    def update_position(self, new_position, animation_length=0.1):
+    def update_position(
+        self, new_position: int, animation_length: float = 0.1
+    ) -> Succession:
+        """Sets pointer index and returns moving animation"""
         if new_position == self.position:
             return Wait(0.1)
         if new_position < len(self.elements):
@@ -59,9 +64,9 @@ class Pointer(VGroup):
             warnings.warn(
                 f"update_position called on new_position={new_position}, which is out of bounds for array length = {len(self.elements)}"
             )
-            return Wait(0.1)
+            return Succession(Wait(0.1))
 
-    def update_text_visual(self):
+    def update_text_visual(self) -> MoveToTarget:
         """Updates pointer label and value and creates a movement animation."""
         text_str = f"{self.name} = {self.position}"
         updated_text_visual = Text(text_str, color=self.color, font="Teko").scale(
@@ -73,12 +78,14 @@ class Pointer(VGroup):
 
         return MoveToTarget(self.text_visual)
 
-    def delete(self, animation_length=0.2):
+    def delete(self, animation_length: float = 0.2) -> AnimationGroup:
+        """Pointer removes itself from the scene"""
         animations = []
         if self.text_visual:
             animations.append(FadeOut(self.text_visual, run_time=animation_length))
         animations.append(FadeOut(self.pointer_visual, run_time=animation_length))
         return AnimationGroup(*animations)
 
-    def array_changed(self, new_elements, animation_length=0.3):
+    def array_changed(self, new_elements: list[Element]) -> None:
+        """Set with parent array's .elements every time you change ordering or values in the list"""
         self.elements = new_elements
