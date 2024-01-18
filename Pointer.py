@@ -1,13 +1,14 @@
 from manim import *
 import warnings
 from Element import Element
+from Array import Array
 
 
 class Pointer(VGroup):
     def __init__(
         self,
         scene: Scene,
-        elements: list[Element],
+        array_object: Array,
         initial_position: int,
         name: str,
         scale: float = 0.5,
@@ -16,7 +17,7 @@ class Pointer(VGroup):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.elements = elements
+        self.array_object = array_object
         self.scene = scene
         self.position = initial_position
         self.name = name
@@ -31,14 +32,16 @@ class Pointer(VGroup):
         self.pointer_visual = (
             Arrow(DOWN, UP, color=self.color)
             .scale(self.size)
-            .next_to(self.elements[self.position], DOWN)
+            .next_to(self.array_object.elements[self.position], DOWN)
         )
         animations = []
         if self.show_text:
             self.text_visual = Text(
                 f"{self.name} = {self.position}", color=self.color, font="Teko"
             ).scale(self.size)
-            self.text_visual.next_to(self.elements[self.position], 4 * DOWN)
+            self.text_visual.next_to(
+                self.array_object.elements[self.position], 4 * DOWN
+            )
             animations.append(FadeIn(self.text_visual))
         animations.append(FadeIn(self.pointer_visual))
         return AnimationGroup(*animations)
@@ -49,10 +52,10 @@ class Pointer(VGroup):
         """Sets pointer index and returns moving animation"""
         if new_position == self.position:
             return Wait(0.1)
-        if new_position < len(self.elements):
+        if new_position < len(self.array_object.elements):
             animations = []
             new_location = self.pointer_visual.copy().next_to(
-                self.elements[new_position], DOWN
+                self.array_object.elements[new_position], DOWN
             )
             self.position = new_position
             if self.show_text:
@@ -62,7 +65,7 @@ class Pointer(VGroup):
             return Succession(AnimationGroup(*animations), Wait(animation_length))
         else:
             warnings.warn(
-                f"update_position called on new_position={new_position}, which is out of bounds for array length = {len(self.elements)}"
+                f"update_position called on new_position={new_position}, which is out of bounds for array length = {len(self.array_object.elements)}"
             )
             return Succession(Wait(0.1))
 
@@ -74,7 +77,9 @@ class Pointer(VGroup):
         )
 
         self.text_visual.target = updated_text_visual
-        self.text_visual.target.next_to(self.elements[self.position], 4 * DOWN)
+        self.text_visual.target.next_to(
+            self.array_object.elements[self.position], 4 * DOWN
+        )
 
         return MoveToTarget(self.text_visual)
 
@@ -85,7 +90,3 @@ class Pointer(VGroup):
             animations.append(FadeOut(self.text_visual, run_time=animation_length))
         animations.append(FadeOut(self.pointer_visual, run_time=animation_length))
         return AnimationGroup(*animations)
-
-    def array_changed(self, new_elements: list[Element]) -> None:
-        """Set with parent array's .elements every time you change ordering or values in the list"""
-        self.elements = new_elements

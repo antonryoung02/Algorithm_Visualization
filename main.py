@@ -56,7 +56,7 @@ class RecursionTestScene(Scene):
         right_child = recursion.current_subproblem.children[1]
         left_pointer = Pointer(
             scene=self,
-            elements=left_child.elements,
+            array_object=left_child,
             initial_position=0,
             name="l",
             scale=0.3,
@@ -65,7 +65,7 @@ class RecursionTestScene(Scene):
         )
         right_pointer = Pointer(
             scene=self,
-            elements=right_child.elements,
+            array_object=right_child,
             initial_position=0,
             name="r",
             scale=0.3,
@@ -205,8 +205,6 @@ class ArrayTestScene(Scene):
                 if arr[i] > arr[j]:
                     self.play(array.swap(i, j))
                     arr[i], arr[j] = arr[j], arr[i]
-                    i_pointer.array_changed(array.elements)
-                    j_pointer.array_changed(array.elements)
                     swapped = True
                 j += 1
                 self.play(j_pointer.update_position(j))
