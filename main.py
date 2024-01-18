@@ -4,9 +4,28 @@ from LinkedList import LinkedList
 from Pointer import Pointer
 from Recursion import Recursion
 from RecursiveElement import RecursiveElement
+from Stack import Stack
 
 
-# manim -pql main.py ArrayScene
+class StackTestScene(Scene):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def construct(self):
+        arr = [3, 1, 4, 8]
+        stack = Stack(self, arr, side_length=0.8)
+        stack.move_to((0, -2, 0))
+        self.play(*stack.initial_animations())
+        self.wait(1)
+
+        self.play(stack.push(5))
+        arr.append(5)
+        self.play(stack.push(6))
+        arr.append(6)
+        self.play(stack.pop())
+        self.wait(1)
+
+
 class RecursiveElementTestScene(Scene):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -180,7 +199,7 @@ class ArrayTestScene(Scene):
 
     def construct(self):
         arr = [5, 1, 2, 0, 6]
-        array = Array(self, arr)
+        array = Array(self, arr, side_length=0.8)
         initial_animations = array.initial_animations()
         array.to_edge(UP + LEFT)
         self.play(*initial_animations)
@@ -189,8 +208,8 @@ class ArrayTestScene(Scene):
         self.play(array.change_value(1, 10))
         arr[1] = 10
 
-        i_pointer = Pointer(self, array, 0, "i", color="#990000")
-        j_pointer = Pointer(self, array, 1, "j", color="#000099")
+        i_pointer = Pointer(self, array, 0, "i", color="#990000", point_direction=LEFT)
+        j_pointer = Pointer(self, array, 1, "j", color="#000099", point_direction=RIGHT)
         self.play(i_pointer.initialize())
         self.play(j_pointer.initialize())
 

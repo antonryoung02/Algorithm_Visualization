@@ -6,7 +6,14 @@ class RecursiveArray(Array):
     """Array with added attributes for navigating through recursion tree"""
 
     def __init__(self, scene, values, side_length=1.5, gap=0.0, parent=None, **kwargs):
-        super().__init__(scene, values, side_length, **kwargs)
+        super().__init__(
+            scene,
+            values,
+            side_length=side_length,
+            gap=gap,
+            stack_direction=RIGHT,
+            **kwargs
+        )
 
         self.parent = parent
         self.children = []

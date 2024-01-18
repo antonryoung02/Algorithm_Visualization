@@ -11,6 +11,7 @@ class Pointer(VGroup):
         array_object: Array,
         initial_position: int,
         name: str,
+        point_direction=UP,
         scale: float = 0.5,
         color: str = "#FF0000",
         show_text: bool = True,
@@ -20,6 +21,7 @@ class Pointer(VGroup):
         self.array_object = array_object
         self.scene = scene
         self.position = initial_position
+        self.point_direction = point_direction
         self.name = name
         self.color = color
         self.pointer_visual = None
@@ -30,9 +32,11 @@ class Pointer(VGroup):
     def initialize(self) -> AnimationGroup:
         """Initializes visual and text, returns init animations"""
         self.pointer_visual = (
-            Arrow(DOWN, UP, color=self.color)
+            Arrow(-1 * self.point_direction, self.point_direction, color=self.color)
             .scale(self.size)
-            .next_to(self.array_object.elements[self.position], DOWN)
+            .next_to(
+                self.array_object.elements[self.position], -1 * self.point_direction
+            )
         )
         animations = []
         if self.show_text:
@@ -40,7 +44,7 @@ class Pointer(VGroup):
                 f"{self.name} = {self.position}", color=self.color, font="Teko"
             ).scale(self.size)
             self.text_visual.next_to(
-                self.array_object.elements[self.position], 4 * DOWN
+                self.array_object.elements[self.position], 4 * -1 * self.point_direction
             )
             animations.append(FadeIn(self.text_visual))
         animations.append(FadeIn(self.pointer_visual))
@@ -55,7 +59,7 @@ class Pointer(VGroup):
         if new_position < len(self.array_object.elements):
             animations = []
             new_location = self.pointer_visual.copy().next_to(
-                self.array_object.elements[new_position], DOWN
+                self.array_object.elements[new_position], -1 * self.point_direction
             )
             self.position = new_position
             if self.show_text:
@@ -78,7 +82,7 @@ class Pointer(VGroup):
 
         self.text_visual.target = updated_text_visual
         self.text_visual.target.next_to(
-            self.array_object.elements[self.position], 4 * DOWN
+            self.array_object.elements[self.position], 4 * -1 * self.point_direction
         )
 
         return MoveToTarget(self.text_visual)

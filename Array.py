@@ -14,7 +14,13 @@ class Array(VGroup):
 
     # Is scene really necessary?
     def __init__(
-        self, scene, values, side_length: float = 1.5, gap: float = 0.0, **kwargs
+        self,
+        scene,
+        values,
+        stack_direction=RIGHT,
+        side_length: float = 1.5,
+        gap: float = 0.0,
+        **kwargs,
     ):
         super().__init__(**kwargs)
         self.scene = scene
@@ -22,6 +28,7 @@ class Array(VGroup):
         self.elements: [Element] = [Element(value, side_length) for value in values]
         self.gap: float = gap
         self.side_length = side_length
+        self.stack_direction = stack_direction
 
         self.initialize()
 
@@ -32,7 +39,9 @@ class Array(VGroup):
                 self.add(element)
             else:
                 self.add(
-                    element.next_to(self.elements[index - 1], RIGHT, buff=self.gap)
+                    element.next_to(
+                        self.elements[index - 1], self.stack_direction, buff=self.gap
+                    )
                 )
 
     def initial_animations(self) -> list[FadeIn]:
@@ -43,7 +52,7 @@ class Array(VGroup):
         """Appends a new element to the end of the array"""
         new_element = Element(value, self.side_length)
         if self.elements:
-            new_element.next_to(self.elements[-1], RIGHT, buff=self.gap)
+            new_element.next_to(self.elements[-1], self.stack_direction, buff=self.gap)
         self.elements.append(new_element)
         self.add(new_element)
         return Succession(FadeIn(new_element), Wait(animation_length))
@@ -76,7 +85,9 @@ class Array(VGroup):
         if self._is_index_invalid(index):
             return [shift_animations]
         for i in range(index, len(self)):
-            shift_animations.append(self[i].animate.shift(RIGHT * distance))
+            shift_animations.append(
+                self[i].animate.shift(self.stack_direction * distance)
+            )
         return [shift_animations]
 
     def swap(
@@ -167,13 +178,15 @@ class Array(VGroup):
         return Succession(scaling_animations, scale_back_animations)
 
     def delete(self, index, side_length=1.5, animation_length=0.5) -> Succession:
-        """Deletes the element at the given index and shifts elements after index left"""
+        """Deletes the element at the given index and shifts elements after index"""
         if self._is_index_invalid(index):
             return Succession(Wait(0.1))
         element = self.elements[index]
         shift_animations = []
         for i in range(index + 1, len(self.elements)):
-            shift_animations.append(self.elements[i].animate.shift(LEFT * side_length))
+            shift_animations.append(
+                self.elements[i].animate.shift(-1 * self.stack_direction * side_length)
+            )
         self.remove(element)
 
         self.elements = [elem for i, elem in enumerate(self.elements) if i != index]

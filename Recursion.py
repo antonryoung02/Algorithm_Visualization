@@ -2,6 +2,7 @@ from manim import *
 from RecursiveArray import RecursiveArray
 
 
+# FIX! array.stack_direction only works for RIGHT
 class Recursion(VGroup):
     def __init__(
         self,
