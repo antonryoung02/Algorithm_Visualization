@@ -5,12 +5,18 @@ from Element import Element
 
 class Stack(Array):
     def __init__(
-        self, scene, values, side_length=1.5, stack_direction=UP, gap=0.0, **kwargs
+        self,
+        scene: Scene,
+        values: list,
+        side_length: float = 1.5,
+        stack_direction=UP,
+        gap: float = 0.0,
+        **kwargs
     ):
+        """Initializes Stack from Array"""
         super().__init__(scene, values, stack_direction, side_length, gap, **kwargs)
 
     def _get_start_position(self):
-        # Compare using numpy array equality and then use all() to check if all elements are equal
         if np.all(self.stack_direction == UP):
             return 3 * RIGHT
         elif np.all(self.stack_direction == DOWN):
@@ -20,9 +26,10 @@ class Stack(Array):
         elif np.all(self.stack_direction == RIGHT):
             return 3 * UP
         else:
-            return 3 * RIGHT  # Default direction
+            return 3 * RIGHT
 
-    def push(self, value, animation_length=0.5):
+    def push(self, value, animation_length: float = 0.5):  # type of value?
+        """Adds element to the top of the stack"""
         new_element = Element(value, self.side_length)
         start_position = self._get_start_position()
         new_element.move_to(start_position)
@@ -42,8 +49,10 @@ class Stack(Array):
 
         return Succession(fly_in_and_stack, Wait(animation_length))
 
-    def pop(self, animation_length=0.5):
+    def pop(self, animation_length: float = 0.5):
+        """Removes element from the top of the stack"""
         return self.delete(self.get_length() - 1, animation_length)
 
-    def peek(self, animation_length=0.5):
+    def peek(self):
+        """Todo: Returns the top element of the stack"""
         return self.compare_size(self.get_length() - 1, -9999)

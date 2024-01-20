@@ -1,5 +1,6 @@
 from manim import *
 from RecursiveArray import RecursiveArray
+from TreeElement import TreeElement
 
 
 # FIX! array.stack_direction only works for RIGHT
@@ -52,6 +53,25 @@ class Recursion(VGroup):
 
         return AnimationGroup(*divide_animations)
 
+    def divide_tree_element(self, parent, level: int, data: dict) -> AnimationGroup:
+        """Recursive divide step, displaying new tree_element made from custom dict keys and values"""
+        subproblem = TreeElement(data, side_height=1, side_width=2.4, parent=parent)
+        divide_animations = [subproblem.initialize()]
+        self.set_current_subproblem(subproblem)
+        self.add(subproblem)
+        subproblem.move_to(self._calculate_position(level))
+
+        if parent is not None:
+            parent.children.append(self.current_subproblem)
+            arrow_animation = self._create_curved_arrow(
+                parent, self.current_subproblem, 0.0
+            )
+            divide_animations.append(arrow_animation)
+        else:
+            self.root = self.current_subproblem
+
+        return AnimationGroup(*divide_animations)
+
     def _create_curved_arrow(
         self, start_element: RecursiveArray, end_element: RecursiveArray, angle: float
     ) -> AnimationGroup:
@@ -82,7 +102,8 @@ class Recursion(VGroup):
 
     def traverse_up(self) -> AnimationGroup:
         """Emulates the upwards traversal of a recursive return statement. Use before returning in base case or inductive step."""
-        completed_animations = self.current_subproblem.show_completed()
+        # completed_animations = self.current_subproblem.show_completed()
+        completed_animations = Wait(0.1)
         parent = self.current_subproblem.parent
         if parent:  # Could give to .set_parent_arrow or RecursiveArray class
             new_arrow = CurvedArrow(

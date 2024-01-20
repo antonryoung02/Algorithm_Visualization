@@ -3,7 +3,7 @@ from Array import Array
 from LinkedList import LinkedList
 from Pointer import Pointer
 from Recursion import Recursion
-from RecursiveElement import RecursiveElement
+from TreeElement import TreeElement
 from Stack import Stack
 
 
@@ -26,15 +26,55 @@ class StackTestScene(Scene):
         self.wait(1)
 
 
-class RecursiveElementTestScene(Scene):
+# manim -pql main.py TreeElementTestScene
+class TreeElementTestScene(Scene):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def construct(self):
-        data = {"variable name": "value"}
-        recursive_element = RecursiveElement(data)
-        self.play(recursive_element.initialize())
-        self.wait(0.5)
+        recursion = Recursion(self, [1, 2, 3])
+        init_animations = recursion.divide_tree_element(
+            recursion.current_subproblem, data={f"fibonacci_sum({3})": ""}, level=0
+        )
+        self.play(init_animations)
+        self.fibonacci_sum(recursion, 3)
+        self.wait(1)
+
+    def fibonacci_sum(self, recursion, n, level=0):
+        if n <= 0:
+            self.play(recursion.current_subproblem.update_data({"0": ""}))
+            if recursion.current_subproblem.parent:
+                traverse_up_animation = recursion.traverse_up()
+                self.play(traverse_up_animation)
+            return 0
+        elif n == 1:
+            self.play(recursion.current_subproblem.update_data({"1": ""}))
+            if recursion.current_subproblem.parent:
+                traverse_up_animation = recursion.traverse_up()
+                self.play(traverse_up_animation)
+            return 1
+        else:
+            left_animations = recursion.divide_tree_element(
+                recursion.current_subproblem,
+                data={f"fibonacci_sum({n - 1})": ""},
+                level=level,
+            )
+            self.play(left_animations)
+            sum_1 = self.fibonacci_sum(recursion, n - 1, level + 1)
+            right_animations = recursion.divide_tree_element(
+                recursion.current_subproblem,
+                data={f"fibonacci_sum({n - 2})": ""},
+                level=level,
+            )
+            self.play(right_animations)
+            sum_2 = self.fibonacci_sum(recursion, n - 2, level + 1)
+            self.play(
+                recursion.current_subproblem.update_data({f"{sum_1 + sum_2}": ""})
+            )
+            if recursion.current_subproblem.parent:
+                traverse_up_animation = recursion.traverse_up()
+                self.play(traverse_up_animation)
+            return sum_1 + sum_2
 
 
 class RecursionTestScene(Scene):
@@ -49,6 +89,7 @@ class RecursionTestScene(Scene):
         self.wait(1)
 
         # Start recursive traversal
+
         self.recursive_traverse(recursion, 0, len(arr))
 
     def recursive_traverse(self, recursion, i, j, level=0):
