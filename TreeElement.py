@@ -9,11 +9,20 @@ class TreeElement(VGroup):
     """
 
     # width is 0?
-    def __init__(self, data: dict, parent=None, side_width=4, side_height=3, **kwargs):
+    def __init__(
+        self,
+        data: dict,
+        parent=None,
+        side_width=3,
+        side_height=1,
+        font_size=16,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
         self.data = data
         self.side_width = side_width
         self.side_height = side_height
+        self.font_size = font_size
         self.rect, self.text = self.create_element()
         self.add(self.rect, self.text)
 
@@ -25,7 +34,7 @@ class TreeElement(VGroup):
         rect = Rectangle(width=self.side_width, height=self.side_height)
         text_lines = [f"{key}: {value}" for key, value in self.data.items()]
 
-        text = Text("\n".join(text_lines), font_size=16)
+        text = Text("\n".join(text_lines), font_size=self.font_size)
         text.move_to(rect.get_center())
         return rect, text
 

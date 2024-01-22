@@ -28,7 +28,7 @@ class Stack(Array):
         else:
             return 3 * RIGHT
 
-    def push(self, value, animation_length: float = 0.5):  # type of value?
+    def push(self, value, animation_length: float = 1):  # type of value?
         """Adds element to the top of the stack"""
         new_element = Element(value, self.side_length)
         start_position = self._get_start_position()
@@ -49,7 +49,7 @@ class Stack(Array):
 
         return Succession(fly_in_and_stack, Wait(animation_length))
 
-    def pop(self, animation_length: float = 0.5):
+    def pop(self, animation_length: float = 1):
         """Removes element from the top of the stack"""
         return self.delete(self.get_length() - 1, animation_length)
 

@@ -1,7 +1,7 @@
 from manim import *
 
 
-class CodeWindow:
+class CodeWindow(VGroup):
     """
     Displays and manages the code block displayed in the scene
 
@@ -9,30 +9,32 @@ class CodeWindow:
     file_path: Path to the displayed code file
     """
 
-    def __init__(self, scene, file_path):
+    def __init__(self, scene, code, file_path="stack_demo.py"):
         self.scene = scene
         self.code = Code(
-            file_path,
+            code=code,
             style="monokai",
             language="python",
             tab_width=4,
             line_spacing=0.4,
-            insert_line_no=False,
+            insert_line_no=True,
             font="American Typewriter",
         )
         self.code.scale(0.85).to_corner(UP + RIGHT, buff=0.3)
 
-    def highlight_line(self, line_number, run_time=0.5):
+    def highlight_line(self, line_number, run_time=0.1):
         """Highlights specific line being executed during the visualization"""
-        paragraph = self.code[2]  # Location of code text objects
-        if 0 <= line_number < len(paragraph.submobjects):
-            line_to_highlight = paragraph.submobjects[line_number]
+        code_paragraph = self.code.submobjects[2]  # Accessing the Paragraph object
+
+        if 0 <= line_number < len(code_paragraph.submobjects):
+            line_to_highlight = code_paragraph.submobjects[line_number]
 
             highlight_bg = BackgroundRectangle(
                 line_to_highlight, fill_opacity=0.5, color="#778cd9"
             )
-            self.scene.play(FadeIn(highlight_bg), run_time=run_time)
-            self.scene.wait(run_time)
-            self.scene.play(FadeOut(highlight_bg), run_time=run_time)
+            return Succession(
+                FadeIn(highlight_bg), Wait(run_time), FadeOut(highlight_bg)
+            )
         else:
             print(f"Line number {line_number} is out of range in the code paragraph.")
+            return Succession(Wait(0.1))

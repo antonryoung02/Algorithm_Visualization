@@ -5,6 +5,8 @@ from Pointer import Pointer
 from Recursion import Recursion
 from TreeElement import TreeElement
 from Stack import Stack
+from CodeWindow import CodeWindow
+from VariableWindow import VariableWindow
 
 
 class StackTestScene(Scene):
@@ -12,18 +14,45 @@ class StackTestScene(Scene):
         super().__init__(**kwargs)
 
     def construct(self):
-        arr = [3, 1, 4, 8]
-        stack = Stack(self, arr, side_length=0.8)
-        stack.move_to((0, -2, 0))
-        self.play(*stack.initial_animations())
+        arr = [5]
+        code = """
+
+        stack = Stack()
+        stack.push(5)
+        stack.push(9)
+        stack.push(6)
+        stack.pop()
+        stack.push(4)
+        stack.push(1)
+        stack.pop()
+        print(stack.peek())
+        print(stack.is_empty())"""
+        code_window = CodeWindow(self, code)
+        variable_window = VariableWindow(
+            {"stack": "", "i": "0", "j": "0"}, font_size=30
+        )
+        variable_window.to_corner(DOWN + LEFT)
+        self.play(FadeIn(variable_window))
+        code_window.code.to_corner(UP + LEFT)
+        self.play(FadeIn(code_window.code))
         self.wait(1)
 
-        self.play(stack.push(5))
-        arr.append(5)
-        self.play(stack.push(6))
+        stack = Stack(self, arr, side_length=0.8)
+        stack.move_to((0, -3, 0))
+        self.play(*stack.initial_animations(), code_window.highlight_line(1))
+
+        self.play(stack.push(9), code_window.highlight_line(2))
+        arr.append(9)
+        self.play(stack.push(6), code_window.highlight_line(3))
         arr.append(6)
-        self.play(stack.pop())
-        self.wait(1)
+        self.play(stack.pop(), code_window.highlight_line(4))
+        arr.pop()
+        self.play(stack.push(4), code_window.highlight_line(5))
+        arr.append(4)
+        self.play(stack.push(1), code_window.highlight_line(6))
+        arr.append(1)
+        self.play(stack.pop(), code_window.highlight_line(7))
+        arr.pop()
 
 
 # manim -pql main.py TreeElementTestScene
