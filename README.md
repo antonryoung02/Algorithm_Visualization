@@ -4,4 +4,6 @@ This project contains several datatype/algorithm classes such as Array, LinkedLi
 
 ## Demo
 
-[![Video Title](https://www.youtube.com/watch?v=pp_ruEFOFM8)
+### Merge Sort Implementation
+
+[![Video Title](https://img.youtube.com/vi/pp_ruEFOFM8/0.jpg)](https://www.youtube.com/watch?v=pp_ruEFOFM8)
