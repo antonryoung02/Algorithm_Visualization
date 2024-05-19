@@ -3,7 +3,7 @@ from Array import Array
 from LinkedList import LinkedList
 from Pointer import Pointer
 from Recursion import Recursion
-from TreeElement import TreeElement
+from Elements.TreeElement import TreeElement
 from Stack import Stack
 from CodeWindow import CodeWindow
 from VariableWindow import VariableWindow

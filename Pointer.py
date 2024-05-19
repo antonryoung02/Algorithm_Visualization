@@ -1,6 +1,6 @@
 from manim import *
 import warnings
-from Element import Element
+from Elements.Element import Element
 from Array import Array
 
 

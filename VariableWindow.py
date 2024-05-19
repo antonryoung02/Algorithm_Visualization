@@ -1,5 +1,5 @@
 from manim import *
-from TreeElement import TreeElement
+from Elements.TreeElement import TreeElement
 
 
 # __init__(self, data: dict, parent=None, side_width=4, side_height=3, **kwargs):

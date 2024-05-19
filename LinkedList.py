@@ -1,6 +1,6 @@
 from manim import *
 from Array import Array
-from Element import Element
+from Elements.Element import Element
 
 
 # Fix: Not returning animations

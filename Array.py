@@ -1,5 +1,5 @@
 from manim import *
-from Element import Element
+from Elements.Element import Element
 
 
 class Array(VGroup):
@@ -48,7 +48,7 @@ class Array(VGroup):
         """Returns a list of animations to play when the array is first created"""
         if len(self.elements) == 0:
             return [Wait(0.1)]
-        return [FadeIn(element) for element in self.elements]
+        return [element.create() for element in self.elements]
 
     def append(self, value: any, animation_length: float = 0.5) -> Succession:
         """Appends a new element to the end of the array"""

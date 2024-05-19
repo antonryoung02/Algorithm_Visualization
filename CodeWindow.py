@@ -9,7 +9,7 @@ class CodeWindow(VGroup):
     file_path: Path to the displayed code file
     """
 
-    def __init__(self, scene, code, file_path="stack_demo.py"):
+    def __init__(self, scene, code):
         self.scene = scene
         self.code = Code(
             code=code,

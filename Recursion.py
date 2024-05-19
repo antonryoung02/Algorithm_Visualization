@@ -1,6 +1,6 @@
 from manim import *
 from RecursiveArray import RecursiveArray
-from TreeElement import TreeElement
+from Elements.TreeElement import TreeElement
 
 
 # FIX! array.stack_direction only works for RIGHT
@@ -102,8 +102,8 @@ class Recursion(VGroup):
 
     def traverse_up(self) -> AnimationGroup:
         """Emulates the upwards traversal of a recursive return statement. Use before returning in base case or inductive step."""
-        # completed_animations = self.current_subproblem.show_completed()
-        completed_animations = Wait(0.1)
+        completed_animations = self.current_subproblem.show_completed()
+        # completed_animations = Wait(0.1)
         parent = self.current_subproblem.parent
         if parent:  # Could give to .set_parent_arrow or RecursiveArray class
             new_arrow = CurvedArrow(
