@@ -1,6 +1,7 @@
 from Elements.Element import Element
 from Elements.TreeElement import TreeElement
 from Arrays.Array import Array
+from Arrays.LinkedList import LinkedList
 from manim import * 
 # PYTHONPATH=$(pwd) manim -pql Arrays/TestArray.py ArrayTestScene
 class ArrayTestScene(Scene):
@@ -9,22 +10,36 @@ class ArrayTestScene(Scene):
 
     def construct(self):
         elements = [Element(str(i), {"side_length":1}) for i in range(3)]
-        array = Array(elements)
-        self.add(array)
-        self.play(array.create())
+        # array = Array(elements)
+        # self.add(array)
+        # self.play(array.create())
+        # self.wait(1)
+        # self.play(array.change_element(1, data="20"))
+        # self.wait(1)
+        # self.play(array.remove_element(0))
+        # # self.play(e.set_data({"val1": "6", "val2":"2"}))
+        # self.wait(1)
+        # self.play(array.change_element(2, data="12"))
+        # self.wait(1)
+        # self.play(array.insert_element(1, Element("23", {"side_length":1})))
+        # self.wait(1)
+        # self.play(array.remove_element(1))
+        # self.wait(1)
+        # self.play(array.delete())
+        # self.wait(1)
+
+        linked_list = LinkedList(elements)
+        self.add(linked_list)
+        self.play(linked_list.create())
         self.wait(1)
-        self.play(array.change_element(1, data="20"))
-        self.wait(1)
-        self.play(array.remove_element(0))
-        # self.play(e.set_data({"val1": "6", "val2":"2"}))
-        self.wait(1)
-        self.play(array.change_element(2, data="12"))
-        self.wait(1)
-        self.play(array.insert_element(1, Element("23", {"side_length":1})))
-        self.wait(1)
-        self.play(array.remove_element(1))
-        self.wait(1)
-        self.play(array.delete())
+        self.play(linked_list.insert_element(2, Element("3", {"side_length":1})))
+
+        self.play(linked_list.insert_element(1, Element("13", {"side_length":1})))
+        self.play(linked_list.insert_element(0, Element("23", {"side_length":1})))
+
+        #self.play(linked_list.remove_element(0))
+        self.play(linked_list.remove_element(1))
+        self.play(linked_list.remove_element(0))
         self.wait(1)
 
 ats = ArrayTestScene()

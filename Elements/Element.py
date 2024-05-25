@@ -1,5 +1,5 @@
 from manim import *
-from .AbstractElement import AbstractElement
+from Elements.AbstractElement import AbstractElement
 
 
 class Element(AbstractElement):

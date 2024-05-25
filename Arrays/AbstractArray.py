@@ -7,11 +7,7 @@ class AbstractArray(ABC, VGroup):
         self.elements = None
 
     @abstractmethod
-    def __get_item__(self, index) -> None:
-        pass
-
-    @abstractmethod
-    def insert_element(self, index, data, style) -> None:
+    def insert_element(self, index, new_element) -> None:
         pass
 
     @abstractmethod

@@ -34,7 +34,7 @@ class Array(AbstractArray):
     def create(self) -> list[FadeIn]:
         """Returns a list of animations to play when the array is first created"""
         if len(self.elements) == 0:
-            return [Wait(0.1)]
+            return Wait(0.1)
         return AnimationGroup(*[element.create() for element in self.elements])
 
     def insert_element(self, index, new_element, animation_length: float = 0.5) -> Succession:
