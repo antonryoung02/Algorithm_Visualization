@@ -1,10 +1,10 @@
 from manim import *
-from Array import Array
-from LinkedList import LinkedList
+from Arrays.Array import Array
+from Arrays.LinkedList import LinkedList
 from Pointer import Pointer
 from Recursion import Recursion
 from Elements.TreeElement import TreeElement
-from Stack import Stack
+from Arrays.Stack import Stack
 from CodeWindow import CodeWindow
 from VariableWindow import VariableWindow
 

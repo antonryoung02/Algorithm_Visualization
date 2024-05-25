@@ -1,5 +1,5 @@
 from manim import *
-from Array import Array
+from Arrays.Array import Array
 from Elements.Element import Element
 
 

@@ -1,17 +1,13 @@
 from manim import *
-from Array import Array
+from Arrays.Array import Array
 
 
 class RecursiveArray(Array):
     """Array with added attributes for navigating through recursion tree"""
 
-    def __init__(self, scene, values, side_length=1.5, gap=0.0, parent=None, **kwargs):
+    def __init__(self, elements, parent=None, **kwargs):
         super().__init__(
-            scene,
-            values,
-            side_length=side_length,
-            gap=gap,
-            stack_direction=RIGHT,
+            elements,
             **kwargs
         )
 
@@ -33,6 +29,6 @@ class RecursiveArray(Array):
     def show_completed(self):
         color_animations = []
         for element in self.elements:
-            color_animations.append(FadeToColor(element.square, "#00FF00"))
+            color_animations.append(element.set_style({'color': "#00FF00"}))
 
         return AnimationGroup(*color_animations)

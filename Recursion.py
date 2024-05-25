@@ -1,5 +1,5 @@
 from manim import *
-from RecursiveArray import RecursiveArray
+from Arrays.RecursiveArray import RecursiveArray
 from Elements.TreeElement import TreeElement
 
 

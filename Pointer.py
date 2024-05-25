@@ -1,7 +1,7 @@
 from manim import *
 import warnings
 from Elements.Element import Element
-from Array import Array
+from Arrays.Array import Array
 
 
 class Pointer(VGroup):
