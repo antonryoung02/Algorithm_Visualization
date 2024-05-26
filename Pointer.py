@@ -19,7 +19,7 @@ class Pointer(VGroup):
         self.text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).next_to(element, -1 * self.direction, buff=0.7)
 
         self.add(self.text)
-        return FadeIn(self.pointer)
+        return AnimationGroup(FadeIn(self.pointer), FadeIn(self.text))
     
     def set_style(self, style):
         new_pointer = Arrow(-1*self.direction, self.direction, **style).scale(self._scale).move_to(self.pointer, -1 * self.direction)
@@ -34,7 +34,10 @@ class Pointer(VGroup):
         """Sets pointer index and returns moving animation"""
         element = self.array.get_element_at_index(index)
         if element == -1:
-            return Wait(0.1)
+            new_text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).move_to(self.text)
+            text_animation = ReplacementTransform(self.text, new_text)
+            self.text = new_text
+            return text_animation
     
         pointer_animation = self.pointer.animate.next_to(element, -1 * self.direction, buff=0)
         new_text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).next_to(element, -1 * self.direction, buff=0.7)
@@ -44,4 +47,6 @@ class Pointer(VGroup):
 
     def delete(self) -> AnimationGroup:
         """Pointer removes itself from the scene"""
+        if self.text:
+           return AnimationGroup(FadeOut(self.pointer), FadeOut(self.text)) 
         return FadeOut(self.pointer)

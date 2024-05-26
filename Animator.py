@@ -20,15 +20,21 @@ class Animator:
         animation = AnimatedBoundary(element.shape, colors=[shape_color]) 
         return Succession(FadeIn(animation), Wait(0.4), FadeOut(animation))
 
+    def indicate(self, index, array):
+        element = array.get_element_at_index(index)
+        if element:
+            return Indicate(element.shape)
+        return Wait(0.1)
+    
     def compare_size(self, index1, index2, array1, array2=None):
         element1 = array1.get_element_at_index(index1)
-        if array2 is None:
-            element2 = array1.get_element_at_index(index2)
-        else:
-            element2 = array2.get_element_at_index(index2)
+        element2 = array1.get_element_at_index(index2) if array2 is None else array2.get_element_at_index(index2)
 
         if element1.equals(element2):
-            return Wait(0.1) # For now
+            return AnimationGroup(
+                self.indicate(index1, array1),
+                self.indicate(index2, array2 if array2 else array1)
+            )
 
         if element1.greater_than(element2):
             return Succession(
@@ -40,7 +46,8 @@ class Animator:
             AnimationGroup(element2.shape.animate.scale(1.2), element1.shape.animate.scale(0.8)), 
             Wait(0.4),
             AnimationGroup(element2.shape.animate.scale(1), element1.shape.animate.scale(1))
-        )
+        ) 
 
-
+    def show_completed(self, array):
+        return AnimationGroup(*[element.animate.set_color(GREEN) for element in array.elements])
         

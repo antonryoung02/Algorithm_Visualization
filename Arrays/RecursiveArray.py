@@ -10,13 +10,9 @@ class RecursiveArray(Array):
             elements,
             **kwargs
         )
-
         self.parent = parent
         self.children = []
         self.parent_arrow = None
-
-    def set_parent(self, new_parent):
-        self.parent = new_parent
 
     def set_parent_arrow(self, parent_arrow):
         prev_arrow = self.parent_arrow
@@ -26,9 +22,5 @@ class RecursiveArray(Array):
             return FadeIn(self.parent_arrow)
         return Transform(prev_arrow, self.parent_arrow)
 
-    def show_completed(self):
-        color_animations = []
-        for element in self.elements:
-            color_animations.append(element.set_style({'color': "#00FF00"}))
-
-        return AnimationGroup(*color_animations)
+    def clear_array(self):
+        return AnimationGroup(*[element.set_data("_") for element in self.elements])

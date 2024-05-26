@@ -6,7 +6,7 @@ class Element(AbstractElement):
     def __init__(self, data:str, style:dict, **kwargs):
         super().__init__(**kwargs)
         self.shape = Square()
-        self.data = Text(data)
+        self.data = Text(str(data))
         self.style = style
         self.add(self.shape)
         self.add(self.data)
@@ -22,7 +22,7 @@ class Element(AbstractElement):
 
     def set_visible(self, new_obj):    
         """An easy way to delay showing the new object
-        UpdateFromFunc(new_data_mobject, self.set_visible)
+        show with UpdateFromFunc(new_data_mobject, self.set_visible)
         """        
         new_obj.set_opacity(1)
     
@@ -46,7 +46,7 @@ class Element(AbstractElement):
         return AnimationGroup(shape_transform, data_transform)
 
     def set_data(self, new_data):
-        new_data_mobject = Text(new_data, **self._extract_data_styles(self.style))
+        new_data_mobject = Text(str(new_data), **self._extract_data_styles(self.style))
         new_data_mobject.move_to(self.data)
         new_data_mobject.set_opacity(0)
 
@@ -54,10 +54,10 @@ class Element(AbstractElement):
 
         self.remove(self.data)
         self.add(new_data_mobject)
-        self.data = new_data_mobject 
+        self.data = new_data_mobject
 
         return Succession(fade_out_old, UpdateFromFunc(new_data_mobject, self.set_visible))
-    
+
     def get_data(self):
         return self.data.text
 

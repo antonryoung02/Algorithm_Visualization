@@ -1,6 +1,6 @@
 from manim import *
 from Arrays.AbstractArray import AbstractArray
-
+import copy
 class Array(AbstractArray):
     """
     Array class, provides common array manipulation methods
@@ -17,16 +17,17 @@ class Array(AbstractArray):
         **kwargs,
     ):        
         super().__init__(**kwargs)
-        self.elements = elements
+        self.elements = [copy.deepcopy(element) for element in elements]
+
         self.element_length = 0.5
-        self.gap = 0.1
+        self.gap = 0
         for index, element in enumerate(self.elements):
             if index == 0:
                 self.add(element)
             else:
                 self.add(
                     element.next_to(
-                        self.elements[index - 1], RIGHT
+                        self.elements[index - 1], RIGHT, buff=self.gap
                     )
                 )
                 
@@ -78,7 +79,6 @@ class Array(AbstractArray):
             animations.append(self.elements[index].set_style(style))
 
         return AnimationGroup(*animations)
-
 
     def _index_in_bounds(self, index):
         return 0 <= index < self.get_length()
