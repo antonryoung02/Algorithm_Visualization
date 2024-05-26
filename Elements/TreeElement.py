@@ -66,3 +66,8 @@ class TreeElement(AbstractElement):
     
     def get_data(self):
         return self.data_dict
+    
+    def equals(self, other):
+        if isinstance(other, TreeElement):
+            return self.data_dict == other.data_dict
+        return False

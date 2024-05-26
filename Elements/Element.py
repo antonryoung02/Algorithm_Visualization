@@ -60,3 +60,19 @@ class Element(AbstractElement):
     
     def get_data(self):
         return self.data.text
+
+    def equals(self, other):
+        if isinstance(other, Element):
+            return self.data.text == other.data.text
+        return self.data.text == str(other)
+    
+    def less_than(self, other):
+        if isinstance(other, Element):
+            return self.data.text < other.data.text
+        return self.data.text < str(other)
+    
+    def greater_than(self, other):
+        if isinstance(other, Element):
+            return self.data.text > other.data.text
+        return self.data.text > str(other)
+

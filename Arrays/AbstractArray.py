@@ -22,5 +22,10 @@ class AbstractArray(ABC, VGroup):
     def create(self, elements) -> None:
         pass
 
+    @abstractmethod
+    def get_element_at_index(self, index) -> None:
+        pass
+
     def delete(self) -> None:
         return AnimationGroup(*[element.delete() for element in self.elements])
+

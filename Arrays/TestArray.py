@@ -4,6 +4,7 @@ from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
 from Pointer import Pointer
+from Animator import Animator
 # PYTHONPATH=$(pwd) manim -pql Arrays/TestArray.py ArrayTestScene
 class ArrayTestScene(Scene):
     def __init__(self, **kwargs):
@@ -28,7 +29,7 @@ class ArrayTestScene(Scene):
         # self.wait(1)
         # self.play(array.delete())
         # self.wait(1)
-
+        a = Animator()
         linked_list = LinkedList(elements)
         self.add(linked_list)
         self.play(linked_list.create())
@@ -47,6 +48,10 @@ class ArrayTestScene(Scene):
         self.play(llp.update(1))
         self.play(llp.update(2))
         self.play(llp.update(3))
+        self.play(a.compare_if_equal(2, 0, linked_list))
+        self.play(a.compare_size(1,2,linked_list))
+        self.play(a.check_is_equal(1, 5, linked_list))
+        self.wait(1)
 
 ats = ArrayTestScene()
 ats.construct()
