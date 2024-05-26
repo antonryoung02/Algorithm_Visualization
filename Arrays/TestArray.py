@@ -3,6 +3,7 @@ from Elements.TreeElement import TreeElement
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
+from Pointer import Pointer
 # PYTHONPATH=$(pwd) manim -pql Arrays/TestArray.py ArrayTestScene
 class ArrayTestScene(Scene):
     def __init__(self, **kwargs):
@@ -36,11 +37,16 @@ class ArrayTestScene(Scene):
 
         self.play(linked_list.insert_element(1, Element("13", {"side_length":1})))
         self.play(linked_list.insert_element(0, Element("23", {"side_length":1})))
-
+        linked_list.to_corner(UP + LEFT)
         #self.play(linked_list.remove_element(0))
         self.play(linked_list.remove_element(1))
         self.play(linked_list.remove_element(0))
         self.wait(1)
+        llp = Pointer(linked_list, direction=UP, style={"color":"red"}, name="i")
+        self.play(llp.create())
+        self.play(llp.update(1))
+        self.play(llp.update(2))
+        self.play(llp.update(3))
 
 ats = ArrayTestScene()
 ats.construct()

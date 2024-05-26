@@ -95,3 +95,8 @@ class Array(AbstractArray):
 
     def get_length(self) -> int:
         return len(self.elements)
+
+    def get_element_at_index(self, index):
+        if self._index_in_bounds(index):
+            return self.elements[index]
+        return -1

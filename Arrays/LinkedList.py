@@ -3,9 +3,6 @@ from Arrays.Array import Array
 from Arrays.AbstractArray import AbstractArray
 from Elements.Element import Element
 
-
-# Fix: Not returning animations
-# Think about adding attributes for arrow and .next in element so that arrows aren't in the array and are easily accessible
 class LinkedList(AbstractArray):
     def __init__(self, elements, **kwargs):
         super().__init__(**kwargs)
@@ -53,8 +50,6 @@ class LinkedList(AbstractArray):
             return unlink_current_element, link_next_element
         else:
             return Wait(0.1), Wait(0.1)
-
-
 
     def remove_element(self, index, animation_length=1):
         # Validate index
@@ -112,11 +107,14 @@ class LinkedList(AbstractArray):
         new_arrow = Arrow(LEFT, RIGHT).scale(0.4) # Extend to direction??
         
         if index == (len(self.elements) - 1) / 2:
-            print("Last index")
             new_arrow.next_to(self.elements[-1], RIGHT, buff=0)
             new_element.next_to(new_arrow, RIGHT, buff=0)
-            step_one_animations = AnimationGroup(new_element.create(), FadeIn(new_arrow))
-            step_two_animations = Wait(0.1) #Nothing 
+            animations = AnimationGroup(new_element.create(), FadeIn(new_arrow))
+            self.add(new_element)
+            self.add(new_arrow)
+            self.elements.append(new_arrow)
+            self.elements.append(new_element)
+            return animations
 
         elif index == 0:
             new_element.next_to(self.elements[2 * index], DOWN, buff=0.3)
@@ -147,3 +145,7 @@ class LinkedList(AbstractArray):
 
         return Succession(step_one_animations, Wait(0.2), step_two_animations)
 
+    def get_element_at_index(self, index):
+        if self._index_in_bounds(index):
+            return self.elements[2*index]
+        return -1    

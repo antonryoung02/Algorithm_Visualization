@@ -20,7 +20,6 @@ class CodeWindow(VGroup):
             insert_line_no=True,
             font="American Typewriter",
         )
-        self.code.scale(0.85).to_corner(UP + RIGHT, buff=0.3)
 
     def highlight_line(self, line_number, run_time=0.1):
         """Highlights specific line being executed during the visualization"""
@@ -37,4 +36,4 @@ class CodeWindow(VGroup):
             )
         else:
             print(f"Line number {line_number} is out of range in the code paragraph.")
-            return Succession(Wait(0.1))
+            return Wait(0.1)
