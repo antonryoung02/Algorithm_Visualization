@@ -6,17 +6,17 @@ from manim import *
 from Pointer import Pointer
 from Animator import Animator
 from Recursion import Recursion
-# PYTHONPATH=$(pwd) manim -pql TestRecursion.py RecursionTestScene
-class RecursionTestScene(Scene):
+# PYTHONPATH=$(pwd) manim -pql Implementations/MergeSort.py MergesortScene
+class MergesortScene(Scene):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.a = Animator()
 
     def construct(self):
-        data = [3, 1, 8, 4]
+        data = [3, 1, 8, 4, 16, 5, 9, 7]
         elements = [Element(str(i), {"side_length":1}) for i in data]
         r = Recursion(elements)
-        self.play(r.initialize())
+        self.play(r.create())
         self.recursion(r, data, 0, len(data), 0)
 
     def recursion(self, array, data, i, j, level):
@@ -78,5 +78,6 @@ class RecursionTestScene(Scene):
             self.play(array.traverse_up())
 
         return combined_data
-rts = RecursionTestScene()
-rts.construct()
+    
+mss = MergesortScene()
+mss.construct()

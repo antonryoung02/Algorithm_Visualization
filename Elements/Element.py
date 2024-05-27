@@ -20,7 +20,7 @@ class Element(AbstractElement):
         keys = ["color", "font_size", "weight"]
         return {key: new_style[key] for key in keys if key in new_style}
 
-    def set_visible(self, new_obj):    
+    def _set_visible(self, new_obj):    
         """An easy way to delay showing the new object
         show with UpdateFromFunc(new_data_mobject, self.set_visible)
         """        
@@ -56,7 +56,7 @@ class Element(AbstractElement):
         self.add(new_data_mobject)
         self.data = new_data_mobject
 
-        return Succession(fade_out_old, UpdateFromFunc(new_data_mobject, self.set_visible))
+        return Succession(fade_out_old, UpdateFromFunc(new_data_mobject, self._set_visible))
 
     def get_data(self):
         return self.data.text

@@ -19,7 +19,7 @@ class Recursion(VGroup):
         self.root = None
         self.current_subproblem = None
 
-    def initialize(self) -> AnimationGroup:
+    def create(self) -> AnimationGroup:
         return self.divide_array(None, 0, 0, len(self.elements))
 
     def divide_array(
@@ -42,17 +42,6 @@ class Recursion(VGroup):
             arrow_animation = Wait(0.1)
 
         return AnimationGroup(self.current_subproblem.create(), arrow_animation)
-
-    def _create_curved_arrow(
-        self, start: RecursiveArray, end: RecursiveArray, angle: float
-    ) -> AnimationGroup:
-        parent_arrow = CurvedArrow(
-            start_point=start.get_bottom(),
-            end_point=end.get_top(),
-            angle=angle,
-        )
-        end.set_parent_arrow(parent_arrow)
-        return FadeIn(parent_arrow)
 
     def _calculate_position(self, level: int):
         parent = self.current_subproblem.parent
