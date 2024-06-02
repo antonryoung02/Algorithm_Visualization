@@ -1,6 +1,4 @@
 from Elements.Element import Element
-from Elements.WindowElement import WindowElement
-from Elements.TreeElement import TreeElement
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import *
@@ -27,10 +25,13 @@ class BuySellStock_121(Scene):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.a = Animator()
+        self.element_style={Square:{"side_length":1}, Text:{"font_size":30}}
+        self.window_element_style={Rectangle:{"width":3, "height":1}, Text:{"font_size":26}}
+
 
     def construct(self):
         prices = [3, 8, 1, 4, 16, 5, 9, 7] 
-        elements = [Element(p, {"side_length": 1}) for p in prices]
+        elements = [Element(p, Square(), self.element_style) for p in prices]
         code_window = CodeWindow(code)
         code_window.to_corner(UP+RIGHT)
 
@@ -40,7 +41,7 @@ class BuySellStock_121(Scene):
 
         ip = Pointer(array, UP, style={"color": "red"}, name="i")
         jp = Pointer(array, UP, style={"color": "blue"}, name="j")
-        window = Array([WindowElement(("max_profit",0), style={})])
+        window = Array([Element({"max_profit":0}, Rectangle(), self.window_element_style)])
         window.to_corner(DOWN + LEFT)
 
         self.play(code_window.create(), window.create(), array.create(), FadeIn(title))
@@ -55,7 +56,7 @@ class BuySellStock_121(Scene):
         while j < len(prices):
             if prices[j] - prices[i] > max_profit:
                 max_profit = prices[j] - prices[i]
-                self.play(self.a.indicate(0, window), self.a.indicate(i, array), self.a.indicate(j, array), window[0].set_data(("max_profit", max_profit)), code_window.highlight(7))
+                self.play(self.a.indicate(0, window), self.a.indicate(i, array), self.a.indicate(j, array), window[0].set_data({"max_profit":max_profit}), code_window.highlight(7))
 
             if prices[j] < prices[i]:
                 self.play(ip.update(j), self.a.compare_size(j, i, array), code_window.highlight(9))

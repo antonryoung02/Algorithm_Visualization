@@ -1,6 +1,5 @@
 from manim import *
 from Arrays.RecursiveArray import RecursiveArray
-from Elements.TreeElement import TreeElement
 
 class Recursion(VGroup):
     def __init__(
