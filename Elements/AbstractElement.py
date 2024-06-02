@@ -7,10 +7,13 @@ class AbstractElement(ABC, VGroup):
         super().__init__(**kwargs)
         self.shape = None
         self.data = None
-        self.style = None
 
     @abstractmethod
     def set_data(self, new_data) -> None:
+        pass
+
+    @abstractmethod
+    def set_style(self, new_style) -> None:
         pass
 
     @abstractmethod 
@@ -23,10 +26,6 @@ class AbstractElement(ABC, VGroup):
 
     @abstractmethod
     def get_data(self) -> None:
-        pass
-
-    @abstractmethod
-    def set_style(self, new_style) -> None:
         pass
 
     def create(self):

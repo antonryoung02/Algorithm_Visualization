@@ -1,28 +1,29 @@
 from Elements.Element import Element
-from Elements.TreeElement import TreeElement
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
 from Pointer import Pointer
 from Animator import Animator
 from Recursion import Recursion
+
 # PYTHONPATH=$(pwd) manim -pql Implementations/MergeSort.py MergesortScene
 class MergesortScene(Scene):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.a = Animator()
+        self.element_style={Square:{"side_length":1}, Text:{"font_size":30}}
+        self.window_element_style={Rectangle:{"width":3, "height":1}, Text:{"font_size":26}}
 
     def construct(self):
-        data = [3, 1, 8, 4, 16, 5, 9, 7]
-        elements = [Element(str(i), {"side_length":1}) for i in data]
+        data = ["3", "1", "8", "4", "6", "5", "9", "7"]
+        elements = [Element(i, Square(), self.element_style) for i in data]
         r = Recursion(elements)
         self.play(r.create())
         self.recursion(r, data, 0, len(data), 0)
 
     def recursion(self, array, data, i, j, level):
         if j - i <= 1:
-            self.play(self.a.show_completed(array.current_subproblem))
-            self.play(array.traverse_up())
+            self.play(self.a.show_completed(array.current_subproblem), array.traverse_up())
             return [data[i]]
         
         midpt = (i + j) // 2 
@@ -73,9 +74,10 @@ class MergesortScene(Scene):
 
         self.play(lp.delete(), rp.delete(), pp.delete())
 
-        self.play(self.a.show_completed(array.current_subproblem))
         if array.current_subproblem.parent is not None:
-            self.play(array.traverse_up())
+            self.play(self.a.show_completed(array.current_subproblem), array.traverse_up())
+        else:
+            self.play(self.a.show_completed(array.current_subproblem))
 
         return combined_data
     
