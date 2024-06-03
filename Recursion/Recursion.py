@@ -29,7 +29,7 @@ class Recursion(VGroup):
         subproblem = RecursiveArray(self.elements[i:j+1], parent=parent)
         
         self.current_subproblem = subproblem
-        self.current_subproblem.move_to(self.positioner.get_subproblem_position(self.elements, self.current_subproblem))
+        self.current_subproblem.move_to(self.positioner.get_subproblem_position(self.current_subproblem))
 
         self.add(self.current_subproblem)
 
