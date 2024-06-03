@@ -4,7 +4,7 @@ from Arrays.LinkedList import LinkedList
 from manim import * 
 from Pointer import Pointer
 from Animator import Animator
-from Recursion import Recursion
+from Recursion.Recursion import Recursion
 
 code = """
 

@@ -26,11 +26,8 @@ class Recursion(VGroup):
         if level > 5:
             raise RecursionError(f"divide_array called too many times!")
         
-        subproblem = RecursiveArray(self.elements[i:j+1], parent=parent)
-        
-        self.current_subproblem = subproblem
+        self.current_subproblem = RecursiveArray(self.elements[i:j+1], parent=parent)
         self.current_subproblem.move_to(self.positioner.get_subproblem_position(self.current_subproblem))
-
         self.add(self.current_subproblem)
 
         if parent is not None:

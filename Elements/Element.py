@@ -42,6 +42,8 @@ class Element(AbstractElement):
         return self.parser.invert_parse(self.data.text)
 
     def equals(self, other):
+        if other is None:
+            return False
         if isinstance(other, Element):
             return self.parser.invert_parse(self.data.text) == other.parser.invert_parse(other.data.text)
         return self.data.text == str(other)
