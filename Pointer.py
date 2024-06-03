@@ -33,7 +33,7 @@ class Pointer(VGroup):
     def update(self, index: int):
         """Sets pointer index and returns moving animation"""
         element = self.array.get_element_at_index(index)
-        if element == -1:
+        if element is None:
             new_text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).move_to(self.text)
             text_animation = ReplacementTransform(self.text, new_text)
             self.text = new_text

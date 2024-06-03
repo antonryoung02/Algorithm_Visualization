@@ -22,9 +22,21 @@ class Animator:
     
     def check_size(self, index, val, array):
         element = array.get_element_at_index(index)
-        shape_color = GREEN if element.greater_than(val) else RED
-        animation = AnimatedBoundary(element.shape, colors=[shape_color]) 
-        return Succession(FadeIn(animation), Wait(0.4), FadeOut(animation))
+
+        if element.equals(val):
+            return self.indicate(index, array)
+
+        if element.greater_than(val):
+            return Succession(
+                AnimationGroup(element.shape.animate.scale(1.2)), 
+                Wait(0.1),
+                AnimationGroup(element.shape.animate.scale(1))
+            )
+        return Succession(
+            AnimationGroup(element.shape.animate.scale(0.8)), 
+            Wait(0.1),
+            AnimationGroup(element.shape.animate.scale(1))
+        ) 
 
     def indicate(self, index, array):
         element = array.get_element_at_index(index)
@@ -56,4 +68,6 @@ class Animator:
 
     def show_completed(self, array):
         return AnimationGroup(*[element.animate.set_color(GREEN) for element in array.elements])
-        
+
+    def set_group_element_styles(self, indices_list, array, new_style):
+        return AnimationGroup(*[array.get_element_at_index(index).set_style(new_style) for index in indices_list]) 

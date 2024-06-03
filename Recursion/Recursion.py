@@ -5,30 +5,31 @@ class Recursion(VGroup):
     def __init__(
         self,
         elements,
-        branching_factor: int = 2,
-        subproblem_size: int = 2,
+        positioner,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.elements = list(elements)
-        self.branching_factor = branching_factor
-        self.level_spacing = 1.5  # Vertical spacing between levels
-        self.subproblem_spacing = 1.5  # Base horizontal spacing between subproblems
-        self.subproblem_size = subproblem_size
+        self.positioner = positioner
         self.root = None
         self.current_subproblem = None
 
     def create(self) -> AnimationGroup:
-        return self.divide_array(None, 0, 0, len(self.elements))
+        return self.divide_array(None, 0, 0, len(self.elements) - 1)
 
     def divide_array(
         self, parent: RecursiveArray, level: int, i: int, j: int
     ) -> AnimationGroup:
         """Recursive divide step, displaying new array made from array[i:j]"""
-        subproblem = RecursiveArray(self.elements[i:j], parent=parent)
+        if j - i < 0:
+           return Wait(0.1)
+        if level > 5:
+            raise RecursionError(f"divide_array called too many times!")
+        
+        subproblem = RecursiveArray(self.elements[i:j+1], parent=parent)
         
         self.current_subproblem = subproblem
-        self.current_subproblem.move_to(self._calculate_position(level))
+        self.current_subproblem.move_to(self.positioner.get_subproblem_position(self.elements, self.current_subproblem))
 
         self.add(self.current_subproblem)
 
@@ -41,22 +42,6 @@ class Recursion(VGroup):
             arrow_animation = Wait(0.1)
 
         return AnimationGroup(self.current_subproblem.create(), arrow_animation)
-
-    def _calculate_position(self, level: int):
-        parent = self.current_subproblem.parent
-        if parent is None:
-            return np.array([0, 3, 0])  # Root positioning in top center
-
-        num_children_elements = len(self.elements) / ((self.subproblem_size) ** (level))
-        self.subproblem_spacing = 6 / (level + 1) ** 1.1
-
-        total_sibling_width = 0.8 * num_children_elements
-        start_x = parent.get_center()[0] - total_sibling_width / 2
-        x = start_x + (1.2 * self.subproblem_spacing * ((len(parent.children))) / 1.3)
-
-        y = parent.get_center()[1] - self.level_spacing
-
-        return np.array([x, y, 0])
 
     def traverse_up(self) -> AnimationGroup:
         """Emulates the upwards traversal of a recursive return statement. Use before returning in base case or inductive step."""

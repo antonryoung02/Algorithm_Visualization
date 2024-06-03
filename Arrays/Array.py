@@ -1,6 +1,8 @@
 from manim import *
 from Arrays.AbstractArray import AbstractArray
 import copy
+import warnings
+
 class Array(AbstractArray):
     """
     Array class, provides common array manipulation methods
@@ -99,4 +101,8 @@ class Array(AbstractArray):
     def get_element_at_index(self, index):
         if self._index_in_bounds(index):
             return self.elements[index]
-        return -1
+        warnings.warn(f"List index {index} out of range for length {len(self.elements)}. Returning None")
+        return None
+
+    def get_midpt(self):
+        return (len(self.elements) - 1) // 2

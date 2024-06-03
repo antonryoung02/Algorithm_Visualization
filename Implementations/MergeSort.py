@@ -4,25 +4,27 @@ from Arrays.LinkedList import LinkedList
 from manim import * 
 from Pointer import Pointer
 from Animator import Animator
-from Recursion import Recursion
+from Recursion.Recursion import Recursion
+from Recursion.PositionStrategies import OneChildPositioner, TwoChildrenPositioner
 
 # PYTHONPATH=$(pwd) manim -pql Implementations/MergeSort.py MergesortScene
 class MergesortScene(Scene):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.a = Animator()
-        self.element_style={Square:{"side_length":1}, Text:{"font_size":30}}
+        self.element_style={Square:{"side_length":0.8}, Text:{"font_size":30}}
         self.window_element_style={Rectangle:{"width":3, "height":1}, Text:{"font_size":26}}
 
     def construct(self):
         data = ["3", "1", "8", "4", "6", "5", "9", "7"]
         elements = [Element(i, Square(), self.element_style) for i in data]
-        r = Recursion(elements)
+        recursion_positioner = TwoChildrenPositioner(1.3, 0.9)
+        r = Recursion(elements, recursion_positioner)
         self.play(r.create())
-        self.recursion(r, data, 0, len(data), 0)
+        self.recursion(r, data, 0, len(data)-1, 0)
 
     def recursion(self, array, data, i, j, level):
-        if j - i <= 1:
+        if j - i <= 0:
             self.play(self.a.show_completed(array.current_subproblem), array.traverse_up())
             return [data[i]]
         
@@ -31,8 +33,8 @@ class MergesortScene(Scene):
         self.play(array.divide_array(array.current_subproblem, level, i, midpt))
         left_data = self.recursion(array, data, i, midpt, level + 1)
 
-        self.play(array.divide_array(array.current_subproblem, level, midpt, j))
-        right_data = self.recursion(array, data, midpt, j, level + 1)
+        self.play(array.divide_array(array.current_subproblem, level, midpt+1, j))
+        right_data = self.recursion(array, data, midpt+1, j, level + 1)
 
         left_child = array.current_subproblem.children[0]
         right_child = array.current_subproblem.children[1]
