@@ -8,6 +8,7 @@ class Pointer(VGroup):
         self._scale = 0.4
         self.name = name
         self.pointer = Arrow(-1 * direction, direction).scale(self._scale)
+        self.current_element = None
         self.text = None
         self.add(self.pointer)
         self.set_style(style)
@@ -32,21 +33,30 @@ class Pointer(VGroup):
 
     def update(self, index: int):
         """Sets pointer index and returns moving animation"""
-        element = self.array.get_element_at_index(index)
-        if element is None:
+        visit_end_animations = Wait(0.1)
+        if self.current_element:
+            visit_end_animations = self.current_element.call_callback_hooks("on_visit_end")
+
+        self.current_element = self.array.get_element_at_index(index)
+        if self.current_element is None:
             new_text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).move_to(self.text)
             text_animation = ReplacementTransform(self.text, new_text)
             self.text = new_text
-            return text_animation
-    
-        pointer_animation = self.pointer.animate.next_to(element, -1 * self.direction, buff=0)
-        new_text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).next_to(element, -1 * self.direction, buff=0.7)
+            return Succession(visit_end_animations, text_animation)
+
+        pointer_animation = self.pointer.animate.next_to(self.current_element, -1 * self.direction, buff=0)
+        visit_start_animations = self.current_element.call_callback_hooks("on_visit_start")
+        new_text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).next_to(self.current_element, -1 * self.direction, buff=0.7)
         text_animation = ReplacementTransform(self.text, new_text)
         self.text = new_text
-        return AnimationGroup(pointer_animation, text_animation)
+        return Succession(visit_end_animations, AnimationGroup(pointer_animation, text_animation), visit_start_animations)
 
     def delete(self) -> AnimationGroup:
         """Pointer removes itself from the scene"""
+        visit_end_animations = Wait(0.1)
+        if self.current_element:
+            visit_end_animations = self.current_element.call_callback_hooks("on_visit_end")
         if self.text:
-           return AnimationGroup(FadeOut(self.pointer), FadeOut(self.text)) 
-        return FadeOut(self.pointer)
+           return AnimationGroup(FadeOut(self.pointer), FadeOut(self.text), visit_end_animations) 
+        
+        return AnimationGroup(FadeOut(self.pointer), visit_end_animations)

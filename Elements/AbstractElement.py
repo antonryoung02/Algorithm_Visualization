@@ -27,9 +27,11 @@ class AbstractElement(ABC, VGroup):
     @abstractmethod
     def get_data(self) -> None:
         pass
+    
+    @abstractmethod
+    def create(self) -> None:
+        pass
 
-    def create(self):
-        return AnimationGroup(FadeIn(self.shape), FadeIn(self.data))
-
-    def delete(self):
-        return AnimationGroup(FadeOut(self.shape), FadeOut(self.data))
+    @abstractmethod
+    def delete(self) -> None:
+        pass

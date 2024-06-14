@@ -23,7 +23,6 @@ class LinkedList(AbstractArray):
                 self.add(arrow.next_to(self[-1], RIGHT, buff=0))
 
     def create(self):
-        #Doesn't use element.create() because of the arrows in self
         if len(self.elements) == 0:
             return Wait(0.1)
         return AnimationGroup(*[FadeIn(obj) for obj in self.elements])

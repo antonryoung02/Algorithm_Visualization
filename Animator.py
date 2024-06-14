@@ -1,7 +1,10 @@
 from manim import * 
 
 class Animator:
+    def __init__(self, scene):
+        self.scene = scene
     """Handles animations for all Element/Array types"""
+    
     def compare_if_equal(self, index1, index2, array1, array2=None):
         element1 = array1.get_element_at_index(index1)
         if array2 is None:

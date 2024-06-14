@@ -11,7 +11,8 @@ class BinaryTreePositioner(AbstractPositioner):
         self.horizontal_spacing = horizontal_spacing
         self.depth_spacing = depth_spacing
 
-    def get_subproblem_position(self, current_subproblem, level):
+    def get_subproblem_position(self, current_subproblem, level): 
+        #level is needed in the binaryTreePositioner to gradually narrow child widths
         if current_subproblem is None:
             return [0,0,0]
         parent = current_subproblem.parent
@@ -27,7 +28,7 @@ class BinaryTreePositioner(AbstractPositioner):
     def _get_spacing_for_child(self, current_subproblem):
         if current_subproblem.parent.left_child is None:
             return 1
-        if current_subproblem.parent.left_child.equals(current_subproblem):
+        if id(current_subproblem.parent.left_child) == id(current_subproblem):
             return 0
         return 1
     

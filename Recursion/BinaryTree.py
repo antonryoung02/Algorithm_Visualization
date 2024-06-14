@@ -75,7 +75,7 @@ class BinaryTree(VGroup):
             level += 1
         return level - 1
 
-    def insert(self, new_element):
+    def insert_element(self, new_element):
         for i in range(len(self.elements)):
             if self.elements[i] is None:
                 break
