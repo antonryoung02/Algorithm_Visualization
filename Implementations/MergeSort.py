@@ -10,7 +10,6 @@ from Callbacks.ElementCallbacks import zoomToElementCallback, displayCodeRecursi
 from Windows.CodeWindow import CodeWindow
 # PYTHONPATH=$(pwd) manim -pql --disable_caching Implementations/MergeSort.py MergesortScene
 
-
 code = """
     def merge_sort(self, array, i, j):
         # Base case 
@@ -47,7 +46,6 @@ class MergesortScene(MovingCameraScene):
 
     def construct(self):
         data = ["3", "1", "8", "4", "6", "5", "9", "7"]
-        data = ["9", "5", "6", "1"]
         elements = [Element(i, Square(), self.element_style, []) for i in data]
         recursion_positioner = TwoChildrenPositioner(1.3, 0.9)
         recursion_callback = displayCodeRecursionCallback(self.code_window, [1, 5, 6, 10], LEFT)

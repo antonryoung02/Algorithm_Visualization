@@ -10,7 +10,7 @@ class CodeWindow(VGroup):
         super().__init__(**kwargs)
         self.code = Code(
             code=code,
-            style="monokai",
+            style="github-dark",
             language="python",
             tab_width=4,
             font_size=12,
@@ -36,7 +36,7 @@ class CodeWindow(VGroup):
                 line_to_highlight, fill_opacity=0.5, color="#778cd9"
             )
             return Succession(
-                Create(highlight_bg), Wait(1), Uncreate(highlight_bg)
+                Create(highlight_bg), Wait(0.8), Uncreate(highlight_bg)
             )
         else:
             print(f"Line number {line_number - 1} is out of range in the code paragraph.")

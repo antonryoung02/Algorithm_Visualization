@@ -22,7 +22,7 @@ class BinarySearchScene(MovingCameraScene):
         self.marked_styles={Square:{"side_length":1, "color":BLUE}, Text:{"font_size":30}}
 
     def construct(self):
-        nums = [-5,-2,-1,0,2, 4, 6, 7, 9]
+        nums = [-5, -2, -1, 0, 2, 4, 6, 7, 9]
         elements = [Element(n, Square(), self.element_style) for n in nums]
         array = Recursion(elements, OneChildPositioner(1.5))
         target = 0

@@ -25,6 +25,10 @@ class AbstractElement(ABC, VGroup):
         pass
 
     @abstractmethod
+    def greater_than(self, other) -> None:
+        pass
+
+    @abstractmethod
     def get_data(self) -> None:
         pass
     

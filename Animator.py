@@ -74,3 +74,25 @@ class Animator:
 
     def set_group_element_styles(self, indices_list, array, new_style):
         return AnimationGroup(*[array.get_element_at_index(index).set_style(new_style) for index in indices_list]) 
+
+    def move_element_data_to_other(self, element, other):
+        moving_data = element.data.copy()
+        moving_data.generate_target()
+        moving_data.target.move_to(other)
+        return Succession(MoveToTarget(moving_data), FadeOut(moving_data), lag_ratio=0.5)
+
+    def sort(self, array):
+        vals = [element.get_data() for element in array.elements]
+        indexed_vals = list(enumerate(vals))
+        sorted_vals = sorted(indexed_vals, key=lambda x: x[1])
+        
+        animations = []
+        for new_index, (old_index, val) in enumerate(sorted_vals):
+            element = array.elements[old_index]
+            animations.append(element.animate.move_to(array.get_element_at_index(new_index)))
+
+        reordered_elements = [array.elements[old_index] for old_index, _ in sorted_vals]
+        array.elements = reordered_elements
+        return AnimationGroup(*animations)
+
+

@@ -28,16 +28,16 @@ class Callback:
 
 
 class zoomToElementCallback(Callback):
-    def __init__(self, scene, zoom_factor=14):
+    def __init__(self, camera, zoom_factor=14):
         super().__init__()
-        self.scene = scene
+        self.camera = camera
         self.zoom_factor = zoom_factor
 
     def on_visit_start(self, element):
-        return self.scene.camera.frame.animate.move_to(element).set(width=min(element.get_width(), element.get_height()) * self.zoom_factor)
+        return self.camera.frame.animate.move_to(element).set(width=min(element.get_width(), element.get_height()) * self.zoom_factor)
 
     def on_visit_end(self, element):
-        return self.scene.camera.frame.animate.move_to(ORIGIN).set(width=config.frame_width)
+        return self.camera.frame.animate.move_to(ORIGIN).set(width=config.frame_width)
 
 
 class displayCodeRecursionCallback(Callback):
@@ -58,6 +58,21 @@ class displayCodeRecursionCallback(Callback):
         self._num_visited_subarrays += 1
         return self.code_window.animate.set_opacity(0)
 
+class displayCodeElementCallback(Callback):
+    def __init__(self, code_window, orientation=LEFT):
+        super().__init__()
+        self._num_visited_subarrays = 0
+        self.code_window = code_window
+        self.orientation = orientation
+  
+    def on_visit_start(self, element):
+        self.code_window.code.next_to(element, self.orientation)
+        return AnimationGroup(self.code_window.animate.set_opacity(1))
+    
+    def on_visit_end(self, element):
+        self._num_visited_subarrays += 1
+        return self.code_window.animate.set_opacity(0)
+    
 class zoomToRecursionCallback(Callback):
     def __init__(self, scene, display_indices, zoom_factor):
         super().__init__()

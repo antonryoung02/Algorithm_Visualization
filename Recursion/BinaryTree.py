@@ -9,16 +9,12 @@ class BinaryTree(VGroup):
     def __init__(self, elements, positioner):
         self.elements = elements
         self.positioner = positioner
-        self.root = None
-        self.current_node = None
-        self.current_node_indicator = None
+        self.root = self.elements[0]
+        self.current_node = self.root
         self._arrange_elements()
 
     def _arrange_elements(self):
-        self.root = self.elements[0]
-        self.current_node = self.root
-        if self.root:
-            self.root.move_to(self.positioner.get_subproblem_position(self.root, 0))
+        self.root.move_to(self.positioner.get_subproblem_position(self.root, 0))
         queue = [(self.root, 0)]
         i = 1
 
@@ -38,31 +34,11 @@ class BinaryTree(VGroup):
                 if current.right_child is not None:
                     current.right_child.move_to(self.positioner.get_subproblem_position(current.right_child, level + 1))
                     current.right_child.set_parent_arrow(CurvedArrow(current.get_bottom(), current.right_child.get_top(), angle=0))
-
                 queue.append((current.right_child, level + 1))
             i += 1
 
     def create(self):
-        self.current_node_indicator = Circle(radius=0.5, color=BLUE).set_stroke(width=10).move_to(self.current_node)
-        return AnimationGroup(*[element.create() for element in self.elements if element is not None], FadeIn(self.current_node_indicator))
-
-    def _move_indicator(self):
-        return self.current_node_indicator.animate.move_to(self.current_node)
-
-    def go_left(self):
-        if self.current_node.left_child is not None:
-            self.current_node = self.current_node.left_child
-        return self._move_indicator()
-
-    def go_right(self):
-        if self.current_node.right_child is not None:
-            self.current_node = self.current_node.right_child
-        return self._move_indicator()
-
-    def go_up(self):
-        if self.current_node.parent is not None:
-            self.current_node = self.current_node.parent
-        return self._move_indicator()
+        return AnimationGroup(*[element.create() for element in self.elements if element is not None])
 
     def _calculate_parent_with_index(self, index):
         if index == 0:
@@ -75,9 +51,9 @@ class BinaryTree(VGroup):
             level += 1
         return level - 1
 
-    def insert_element(self, new_element):
-        for i in range(len(self.elements)):
-            if self.elements[i] is None:
+    def level_order_insert(self, new_element):
+        for i, element in enumerate(self.elements):
+            if element is None:
                 break
         else:
             i = len(self.elements)

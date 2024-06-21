@@ -53,24 +53,24 @@ class Element(AbstractElement):
             return False
         if isinstance(other, Element):
             return self.parser.invert_parse(self.data.text) == other.parser.invert_parse(other.data.text)
-        return self.data.text == str(other)
+        return self.parser.invert_parse(self.data.text) == self.parser.invert_parse(str(other))
     
     def less_than(self, other):
         if isinstance(other, Element):
             return self.parser.invert_parse(self.data.text) < other.parser.invert_parse(other.data.text)
-        return self.data.text < str(other)
+        return self.parser.invert_parse(self.data.text) < self.parser.invert_parse(str(other))
     
     def greater_than(self, other):
         if isinstance(other, Element):
             return self.parser.invert_parse(self.data.text) > other.parser.invert_parse(other.data.text)
-        return self.data.text > str(other)
+        return self.parser.invert_parse(self.data.text) > self.parser.invert_parse(str(other))
     
     def call_callback_hooks(self, method_name):
         animations = []
         for callback in self.callbacks:
             method = getattr(callback, method_name, None)
             if callable(method):
-                animations.append(method())
+                animations.append(method(self))
             else:
                 print(f"Warning: '{method_name}' method not found in {callback}")
         return AnimationGroup(*animations)

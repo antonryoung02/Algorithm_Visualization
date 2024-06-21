@@ -17,7 +17,13 @@ class Pointer(VGroup):
         """Initializes visual and text, returns init animations"""
         element = self.array.get_element_at_index(index)
         self.pointer.next_to(element, -1 * self.direction, buff=0)
-        self.text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).next_to(element, -1 * self.direction, buff=0.7)
+        
+        if self.name is not None:
+            text_content = f"{self.name}: {index}" 
+        else:
+            text_content = ""
+
+        self.text = Text(text_content, font_size=18, color=self.pointer.get_color()).next_to(element, -1 * self.direction, buff=0.7)
 
         self.add(self.text)
         return AnimationGroup(FadeIn(self.pointer), FadeIn(self.text))
@@ -37,16 +43,21 @@ class Pointer(VGroup):
         if self.current_element:
             visit_end_animations = self.current_element.call_callback_hooks("on_visit_end")
 
+        if self.name is not None:
+            text_content = f"{self.name}: {index}" 
+        else:
+            text_content = ""
+
         self.current_element = self.array.get_element_at_index(index)
         if self.current_element is None:
-            new_text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).move_to(self.text)
+            new_text = Text(text_content, font_size=18, color=self.pointer.get_color()).move_to(self.text)
             text_animation = ReplacementTransform(self.text, new_text)
             self.text = new_text
             return Succession(visit_end_animations, text_animation)
 
         pointer_animation = self.pointer.animate.next_to(self.current_element, -1 * self.direction, buff=0)
         visit_start_animations = self.current_element.call_callback_hooks("on_visit_start")
-        new_text = Text(f"{self.name}: {index}", font_size=18, color=self.pointer.get_color()).next_to(self.current_element, -1 * self.direction, buff=0.7)
+        new_text = Text(text_content, font_size=18, color=self.pointer.get_color()).next_to(self.current_element, -1 * self.direction, buff=0.7)
         text_animation = ReplacementTransform(self.text, new_text)
         self.text = new_text
         return Succession(visit_end_animations, AnimationGroup(pointer_animation, text_animation), visit_start_animations)

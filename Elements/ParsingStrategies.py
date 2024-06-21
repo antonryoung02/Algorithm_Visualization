@@ -5,7 +5,7 @@ Provides classes that convert an element's data for compatability with the manim
 For all implementations:
 
 func parse: Converts a raw data type to a string to use with Text(str)
-func invert_parse: Converts Text.text to original type for comparison, etc
+func invert_parse: Converts Text.text to original type for comparison
 """
 
 class AbstractParser(ABC):
