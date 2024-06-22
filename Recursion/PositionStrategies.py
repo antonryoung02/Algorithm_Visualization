@@ -28,9 +28,9 @@ class BinaryTreePositioner(AbstractPositioner):
     def _get_spacing_for_child(self, current_subproblem):
         if current_subproblem.parent.left_child is None:
             return 1
-        if id(current_subproblem.parent.left_child) == id(current_subproblem):
-            return 0
-        return 1
+        if id(current_subproblem.parent.left_child) != id(current_subproblem):
+            return 1
+        return 0
     
 class TwoChildrenPositioner(AbstractPositioner):
     def __init__(self, vertical_spacing=1.5, horizontal_spacing=1):

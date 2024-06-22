@@ -10,10 +10,10 @@ from Windows.CodeWindow import CodeWindow
 code = """
 class Solution:
     def numRescueBoats(self, people: List[int], limit: int) -> int:
-        people = sorted(people)
         num_boats = 0
         lp = 0
         rp = len(people) - 1
+        people = sorted(people)
         while lp <= rp:
             person_sum = people[lp] + people[rp]
             if person_sum <= limit:
@@ -39,7 +39,7 @@ class MyScene(MovingCameraScene):
         numbers = [1, 9, 3, 2, 5, 1, 4, 7]
         limit = 9
         elements = [Element(n, Square(), self.element_style) for n in numbers]
-        code_window = CodeWindow(code).scale(1.3)
+        code_window = CodeWindow(code).scale(1.2)
         code_window.to_corner(DOWN).shift(2*DOWN)
 
         array = Array(elements)        
@@ -49,9 +49,13 @@ class MyScene(MovingCameraScene):
         person_sum_element = Element(0, Rectangle(), self.window_element_style)
         num_boats_element = Element(0, Rectangle(), self.window_element_style)
         window_arr = Array([person_sum_element, limit_element, num_boats_element]).move_to(array).shift(2.5*DOWN)
+
         target_text = Text("limit", font=self.font, font_size=24).next_to(window_arr[1], DOWN)
         curr_sum_text = Text("person_sum", font=self.font, font_size=24).next_to(window_arr[0], DOWN)
         num_boats_text = Text("num_boats", font=self.font, font_size=24).next_to(window_arr[2], DOWN)
+
+        text_animations = AnimationGroup(FadeIn(num_boats_text), FadeIn(target_text), FadeIn(curr_sum_text))
+        code_init_animations = AnimationGroup(code_window.highlight(3), code_window.highlight(4), code_window.highlight(5))
 
         ip = Pointer(array, UP, style={"color": "red"}, name="lp")
         jp = Pointer(array, UP, style={"color": "blue"}, name="rp")
@@ -59,25 +63,28 @@ class MyScene(MovingCameraScene):
         j = len(numbers) - 1
         num_boats = 0
 
-        self.play(FadeIn(num_boats_text), FadeIn(target_text), FadeIn(curr_sum_text), window_arr.create(), array.create(), jp.create(len(array)-1), ip.create(), code_window.create(), code_window.animate.set_opacity(1))
+        self.play(text_animations, window_arr.create(), array.create(), jp.create(len(array)-1), ip.create(), code_window.create(), code_window.animate.set_opacity(1))
+        self.play(code_init_animations)
 
         numbers = sorted(numbers)
-        self.play(self.a.sort(array))
+        self.play(self.a.sort(array), code_window.highlight(6))
 
         while i <= j:
             person_sum = numbers[i] + numbers[j]
-            self.play(self.a.move_element_data_to_other(array.elements[i], window_arr[0]), self.a.move_element_data_to_other(array.elements[j], window_arr[0]), window_arr[0].set_data(person_sum))
+            self.play(code_window.highlight(8), self.a.move_element_data_to_other(array.elements[i], window_arr[0]), self.a.move_element_data_to_other(array.elements[j], window_arr[0]), window_arr[0].set_data(person_sum))
             if person_sum <= limit:
-                self.play(self.a.compare_size(0, 1, window_arr))
+                self.play(code_window.highlight(9), self.a.compare_size(0, 1, window_arr))
                 i += 1
                 j -= 1
-                self.play(jp.update(j), ip.update(i))
+                num_boats += 1
+                self.play(jp.update(j), ip.update(i), code_window.highlight(10), code_window.highlight(11), code_window.highlight(14), window_arr[2].set_data(num_boats))
             else:
+                self.play(code_window.highlight(12))
                 j -= 1
-                self.play(jp.update(j))
-            num_boats += 1
-            self.play(window_arr[2].set_data(num_boats))
+                num_boats += 1
+                self.play(jp.update(j), code_window.highlight(13), code_window.highlight(14), window_arr[2].set_data(num_boats))
 
+        self.play(self.a.indicate(2, window_arr), code_window.highlight(15))
         return num_boats
 
 scene = MyScene()

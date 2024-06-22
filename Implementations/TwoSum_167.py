@@ -37,12 +37,11 @@ class MyScene(MovingCameraScene):
         numbers = [5, 3, 20, 6, 7, 13, 10, 1] 
         target = 12
         elements = [Element(n, Square(), self.element_style) for n in numbers]
-        code_window = CodeWindow(code).scale(1.4)
+        code_window = CodeWindow(code).scale(1.3)
         code_window.to_corner(DOWN).shift(2*DOWN)
 
         array = Array(elements)        
         array.to_corner(UP).shift(3.1*LEFT).shift(UP)
-
 
         target_element = Element(target, Rectangle(), self.window_element_style)
         curr_sum_element = Element(0, Rectangle(), self.window_element_style)
@@ -56,7 +55,7 @@ class MyScene(MovingCameraScene):
         j = len(numbers) - 1
 
         self.play(FadeIn(target_text), FadeIn(curr_sum_text), window_arr.create(), array.create(), jp.create(len(array)-1), ip.create(), code_window.create(), code_window.animate.set_opacity(1))
-
+        self.play(code_window.highlight(3), code_window.highlight(4))
         numbers = sorted(numbers)
         self.play(self.a.sort(array))
 

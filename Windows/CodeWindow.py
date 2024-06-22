@@ -23,21 +23,29 @@ class CodeWindow(VGroup):
     def create(self):
         return FadeIn(self.code)
 
-    def highlight(self, line_number):
+    def highlight(self, lines):
         """Highlights specific line being executed during the visualization if visible"""
         if self.fill_opacity == 0:
             return Wait(0.1)
         
-        code_paragraph = self.code.submobjects[2]  # Accessing the Paragraph object
-        if 0 <= line_number - 1 < len(code_paragraph.submobjects):
-            line_to_highlight = code_paragraph.submobjects[line_number - 1]
+        if not isinstance(lines, list):
+            lines = [lines]
 
-            highlight_bg = BackgroundRectangle(
-                line_to_highlight, fill_opacity=0.5, color="#778cd9"
-            )
-            return Succession(
-                Create(highlight_bg), Wait(0.8), Uncreate(highlight_bg)
-            )
-        else:
-            print(f"Line number {line_number - 1} is out of range in the code paragraph.")
-            return Wait(0.1)
+        animations = []
+        
+        code_paragraph = self.code.submobjects[2]  # Accessing the Paragraph object
+        for line_number in lines:
+            if 0 <= line_number - 1 < len(code_paragraph.submobjects):
+                line_to_highlight = code_paragraph.submobjects[line_number - 1]
+
+                highlight_bg = BackgroundRectangle(
+                    line_to_highlight, fill_opacity=0.5, color="#778cd9"
+                ).shift(0.1*DOWN)
+                animations.append(Succession(
+                    Create(highlight_bg), Wait(0.8), Uncreate(highlight_bg)
+                ))
+            else:
+                print(f"Line number {line_number - 1} is out of range in the code paragraph.")
+                animations.append(Wait(0.1))
+
+        return AnimationGroup(*animations)
