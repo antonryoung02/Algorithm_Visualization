@@ -40,7 +40,7 @@ class CodeWindow(VGroup):
 
                 highlight_bg = BackgroundRectangle(
                     line_to_highlight, fill_opacity=0.5, color="#778cd9"
-                ).shift(0.1*DOWN)
+                ).stretch_to_fit_height(line_to_highlight.height * 0.75).shift(0.1*DOWN)
                 animations.append(Succession(
                     Create(highlight_bg), Wait(0.8), Uncreate(highlight_bg)
                 ))

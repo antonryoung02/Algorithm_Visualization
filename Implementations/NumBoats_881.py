@@ -13,7 +13,7 @@ class Solution:
         num_boats = 0
         lp = 0
         rp = len(people) - 1
-        people = sorted(people)
+        people.sort()
         while lp <= rp:
             person_sum = people[lp] + people[rp]
             if person_sum <= limit:

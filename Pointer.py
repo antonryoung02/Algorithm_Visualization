@@ -16,6 +16,7 @@ class Pointer(VGroup):
     def create(self, index=0) -> AnimationGroup:
         """Initializes visual and text, returns init animations"""
         element = self.array.get_element_at_index(index)
+        self.current_element = element
         self.pointer.next_to(element, -1 * self.direction, buff=0)
         
         if self.name is not None:
@@ -26,7 +27,8 @@ class Pointer(VGroup):
         self.text = Text(text_content, font_size=18, color=self.pointer.get_color()).next_to(element, -1 * self.direction, buff=0.7)
 
         self.add(self.text)
-        return AnimationGroup(FadeIn(self.pointer), FadeIn(self.text))
+        visit_start_animations = self.current_element.call_callback_hooks("on_visit_start")
+        return AnimationGroup(visit_start_animations, FadeIn(self.pointer), FadeIn(self.text))
     
     def set_style(self, style):
         new_pointer = Arrow(-1*self.direction, self.direction, **style).scale(self._scale).move_to(self.pointer, -1 * self.direction)

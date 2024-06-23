@@ -3,28 +3,22 @@ from manim import *
 class Callback:
 
     def on_create(self, element):
-        return Wait(0.1)
+        return Wait(0)
 
     def on_delete(self, element):
-        return Wait(0.1)
+        return Wait(0)
 
     def before_set_data(self, element):
-        return Wait(0.1)
+        return Wait(0)
 
     def after_set_data(self, element):
-        return Wait(0.1)
-
-    def before_set_style(self, element):
-        return Wait(0.1)
-
-    def after_set_style(self, element):
-        return Wait(0.1)
+        return Wait(0)
     
     def on_visit_start(self, element):
-        return Wait(0.1)
+        return Wait(0)
 
     def on_visit_end(self, element):
-        return Wait(0.1)
+        return Wait(0)
 
 
 class zoomToElementCallback(Callback):
@@ -52,7 +46,7 @@ class displayCodeRecursionCallback(Callback):
         if self._num_visited_subarrays in self.display_indices:
             self.code_window.code.next_to(recursion.current_subproblem, self.orientation)
             return AnimationGroup(self.code_window.animate.set_opacity(1))
-        return Wait(0.1)
+        return Wait(0)
     
     def on_visit_end(self, recursion):
         self._num_visited_subarrays += 1
@@ -84,8 +78,38 @@ class zoomToRecursionCallback(Callback):
     def on_visit_start(self, recursion):
         if self._num_visited_subarrays in self.display_indices:
             return self.scene.camera.frame.animate.move_to(recursion.current_subproblem).set(width=min(recursion.current_subproblem.get_width(), recursion.current_subproblem.get_height()) * self.zoom_factor)
-        return Wait(0.1)
+        return Wait(0)
     
     def on_visit_end(self, recursion):
         self._num_visited_subarrays += 1
         return self.scene.camera.frame.animate.move_to(ORIGIN).set(width=config.frame_width)
+
+class ShowDataChangeElementCallback(Callback):
+    def __init__(self):
+        self.old_data = None
+        self.new_data = None
+        super().__init__()
+    
+    def before_set_data(self, element):
+        self.old_data = element.get_data()
+        return Wait(0)
+
+    def after_set_data(self, element):
+        self.new_data = element.get_data()
+        original_color = element.shape.get_color()
+        if self.old_data < self.new_data:
+            return Succession(AnimationGroup(element.shape.animate.scale(1.1)), Wait(0.1), AnimationGroup(element.shape.animate.scale(1)))
+        elif self.old_data > self.new_data:
+            return Succession(AnimationGroup(element.shape.animate.scale(0.9)), Wait(0.1), AnimationGroup(element.shape.animate.scale(1)))
+        else:
+            return Wait(0)
+
+class ShowVisitCompleteElementCallback(Callback):
+    def __init__(self, color=GRAY_BROWN):
+        super().__init__()
+        self.color = color
+
+    def on_visit_end(self, element):
+        element.set_z_index(-1)
+        return AnimationGroup(element.set_style({type(element.shape):{"color":self.color}}))
+    

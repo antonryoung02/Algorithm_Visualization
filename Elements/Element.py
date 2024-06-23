@@ -26,24 +26,32 @@ class Element(AbstractElement):
         return Succession(before_set_data_animations, ReplacementTransform(old_data, new_data), after_set_data_animations)
     
     def set_style(self, new_style):
-        before_set_style_animations = self.call_callback_hooks("before_set_style")
-        self.style = new_style
-        old_shape = self.shape
-        old_data = self.data
-    
-        new_shape = type(self.shape)(**self.style[type(self.shape)]).move_to(self.shape)
-        new_data = Text(self.data.text, **self.style[Text]).move_to(self.data)
 
-        self.remove(old_shape)
-        self.remove(old_data)
-        self.add(new_shape)
-        self.add(new_data)
-        self.shape = new_shape
-        self.data = new_data
-        
-        after_set_style_animations = self.call_callback_hooks("after_set_style")
-        set_style_animations = AnimationGroup(ReplacementTransform(old_shape, new_shape), ReplacementTransform(old_data, new_data))
-        return Succession(before_set_style_animations, set_style_animations, after_set_style_animations)
+        if type(self.shape) in new_style.keys():
+            for key, val in new_style[type(self.shape)].items():
+                self.style[type(self.shape)][key] = val
+            new_shape = type(self.shape)(**self.style[type(self.shape)]).move_to(self.shape)
+            old_shape = self.shape
+            self.remove(old_shape)
+            self.add(new_shape)
+            self.shape = new_shape
+            shape_transform = ReplacementTransform(old_shape, new_shape)
+        else:
+            shape_transform = Wait(0)
+
+        if Text in new_style.keys():
+            for key, val in new_style[Text].items():
+                self.style[Text][key] = val
+            new_data = Text(self.data.text, **self.style[Text]).move_to(self.data)
+            old_data = self.data
+            self.remove(old_data)
+            self.add(new_data)
+            self.data = new_data
+            data_transform = ReplacementTransform(old_data, new_data)
+        else:
+            data_transform = Wait(0)
+
+        return AnimationGroup(shape_transform, data_transform)
 
     def get_data(self):
         return self.parser.invert_parse(self.data.text)

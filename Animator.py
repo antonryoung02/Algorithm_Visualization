@@ -1,4 +1,5 @@
 from manim import * 
+import random
 
 class Animator:
     def __init__(self, scene):
@@ -69,14 +70,16 @@ class Animator:
             AnimationGroup(element2.shape.animate.scale(1), element1.shape.animate.scale(1))
         ) 
 
-    def show_completed(self, array):
-        return AnimationGroup(*[element.animate.set_color(GREEN) for element in array.elements])
+    def show_completed(self, array, color=GREEN):
+        return AnimationGroup(*[element.animate.set_color(color) for element in array.elements])
 
     def set_group_element_styles(self, indices_list, array, new_style):
         return AnimationGroup(*[array.get_element_at_index(index).set_style(new_style) for index in indices_list]) 
 
-    def move_element_data_to_other(self, element, other):
+    def move_element_data_to_other(self, element, other, color=None):
         moving_data = element.data.copy()
+        if color is not None:
+            moving_data.set_color(color)
         moving_data.generate_target()
         moving_data.target.move_to(other)
         return Succession(MoveToTarget(moving_data), FadeOut(moving_data), lag_ratio=0.5)
@@ -89,10 +92,25 @@ class Animator:
         animations = []
         for new_index, (old_index, val) in enumerate(sorted_vals):
             element = array.elements[old_index]
-            animations.append(element.animate.move_to(array.get_element_at_index(new_index)))
+            arc = (1 - random.random()) * 90 * DEGREES
+            animations.append(Transform(element, element.copy().move_to(array.get_element_at_index(new_index)), path_arc=arc))
 
         reordered_elements = [array.elements[old_index] for old_index, _ in sorted_vals]
         array.elements = reordered_elements
         return AnimationGroup(*animations)
+
+    def show_increase_element_data(self, element):
+        return Succession(
+            element.data.animate.scale(1.2), 
+            Wait(0.1),
+            element.data.animate.scale(1)
+        )
+
+    def show_decrease_element_data(self, element):
+        return Succession(
+            element.data.animate.scale(0.8), 
+            Wait(0.1),
+            element.data.animate.scale(1)
+        )
 
 
