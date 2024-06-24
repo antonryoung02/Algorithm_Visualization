@@ -6,7 +6,7 @@ This project contains several datatype/algorithm classes such as Array, LinkedLi
 
 ### Updated Merge Sort
 
-[![Video Title](https://img.youtube.com/vi/yZzSEeVbQTs/0.jpg)](https://www.youtube.com/watch?v=yZzSEeVbQTs)
+[![Video Title](https://img.youtube.com/vi/3jJJsIgEGz8/0.jpg)](https://www.youtube.com/watch?v=3jJJsIgEGz8)
 
 
 ### Old Merge Sort Implementation
