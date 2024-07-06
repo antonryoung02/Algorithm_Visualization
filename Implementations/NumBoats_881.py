@@ -2,7 +2,7 @@ from Elements.Element import Element
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
-from Pointer import Pointer
+from ArrayPointer import Pointer
 from Animator import Animator
 from Recursion.Recursion import Recursion
 from Windows.CodeWindow import CodeWindow
@@ -73,7 +73,7 @@ class MyScene(MovingCameraScene):
             person_sum = numbers[i] + numbers[j]
             self.play(code_window.highlight(8), self.a.move_element_data_to_other(array.elements[i], window_arr[0]), self.a.move_element_data_to_other(array.elements[j], window_arr[0]), window_arr[0].set_data(person_sum))
             if person_sum <= limit:
-                self.play(code_window.highlight(9), self.a.compare_size(0, 1, window_arr))
+                self.play(code_window.highlight(9), self.a.compare_size(window_arr.elements[0], window_arr.elements[1]))
                 i += 1
                 j -= 1
                 num_boats += 1
@@ -84,7 +84,7 @@ class MyScene(MovingCameraScene):
                 num_boats += 1
                 self.play(jp.update(j), code_window.highlight(13), code_window.highlight(14), window_arr[2].set_data(num_boats))
 
-        self.play(self.a.indicate(2, window_arr), code_window.highlight(15))
+        self.play(self.a.indicate(window_arr.elements[2]), code_window.highlight(15))
         return num_boats
 
 scene = MyScene()

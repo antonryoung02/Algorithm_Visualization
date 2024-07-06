@@ -2,7 +2,7 @@ from Elements.Element import Element
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
-from Pointer import Pointer
+from ArrayPointer import Pointer
 from Animator import Animator
 from Recursion.Recursion import Recursion
 
@@ -45,11 +45,11 @@ class SubstringWithoutDuplicatesScene(MovingCameraScene):
 
         while j < len(s):
             if s[j] in s[i:j]:
-                self.play(*[self.a.check_is_equal(c, -1, array) for c in range(i, j+1)])
+                self.play(*[self.a.check_is_equal(array.elements[c], -1) for c in range(i, j+1)])
                 i += 1
                 self.play(ip.update(i))
             else:
-                self.play(*[self.a.compare_if_equal(c, c, array) for c in range(i, j+1)])
+                self.play(*[self.a.compare_if_equal(array.elements[c], array.elements[c]) for c in range(i, j+1)])
                 max_length_substring = max(max_length_substring, j - i + 1)
                 j += 1
                 self.play(jp.update(j))

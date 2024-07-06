@@ -2,6 +2,7 @@ from manim import *
 from Elements.Element import Element
 import numpy as np
 
+#TODO
 class GraphElement(Element):
     def __init__(self, data, shape=Square, style={Square:{}, Text:{}}, callbacks=[], **kwargs):
         super().__init__(data, shape, style, callbacks, **kwargs)

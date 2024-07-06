@@ -1,11 +1,4 @@
-from abc import ABC, abstractmethod
-
-class AbstractPositioner(ABC):
-    @abstractmethod
-    def get_subproblem_position(self, current_subproblem) -> None:
-        pass
-
-class BinaryTreePositioner(AbstractPositioner):
+class BinaryTreePositioner:
     def __init__(self, vertical_spacing=1, horizontal_spacing=4, depth_spacing=1.8):
         self.vertical_spacing = vertical_spacing
         self.horizontal_spacing = horizontal_spacing
@@ -32,7 +25,7 @@ class BinaryTreePositioner(AbstractPositioner):
             return 1
         return 0
     
-class TwoChildrenPositioner(AbstractPositioner):
+class TwoChildrenPositioner:
     def __init__(self, vertical_spacing=1.5, horizontal_spacing=1):
         self.vertical_spacing = vertical_spacing
         self.horizontal_spacing = horizontal_spacing
@@ -48,7 +41,7 @@ class TwoChildrenPositioner(AbstractPositioner):
         y = parent.get_center()[1] - self.vertical_spacing
         return [x, y, 0]
      
-class OneChildPositioner(AbstractPositioner):
+class OneChildPositioner:
     def __init__(self, vertical_spacing = 1.5):
         self.vertical_spacing = vertical_spacing
 

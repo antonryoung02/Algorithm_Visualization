@@ -1,4 +1,5 @@
 from manim import *
+import warnings
 
 class Pointer(VGroup):
     def __init__(self, array, direction, style, name=None, **kwargs):
@@ -15,7 +16,7 @@ class Pointer(VGroup):
 
     def create(self, index=0) -> AnimationGroup:
         """Initializes visual and text, returns init animations"""
-        element = self.array.get_element_at_index(index)
+        element = self.get_element_at_index(index)
         self.current_element = element
         self.pointer.next_to(element, -1 * self.direction, buff=0)
         
@@ -50,7 +51,7 @@ class Pointer(VGroup):
         else:
             text_content = ""
 
-        self.current_element = self.array.get_element_at_index(index)
+        self.current_element = self.get_element_at_index(index)
         if self.current_element is None:
             new_text = Text(text_content, font_size=18, color=self.pointer.get_color()).move_to(self.text)
             text_animation = ReplacementTransform(self.text, new_text)
@@ -73,3 +74,9 @@ class Pointer(VGroup):
            return AnimationGroup(FadeOut(self.pointer), FadeOut(self.text), visit_end_animations) 
         
         return AnimationGroup(FadeOut(self.pointer), visit_end_animations)
+
+    def get_element_at_index(self, index):
+        if self.array._index_in_bounds(index):
+            return self.elements[index]
+        warnings.warn(f"List index {index} out of range for length {len(self.elements)}. Returning None")
+        return None

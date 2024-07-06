@@ -21,7 +21,6 @@ class AbstractParser(ABC):
         if not isinstance(data_str, str):
             raise TypeError(f"AbstractParser.invert_parse expects a string, got: {type(data_str)}")
 
-
 class IntParser(AbstractParser):
     def parse(self, data):
         if not isinstance(data, int):
@@ -32,7 +31,6 @@ class IntParser(AbstractParser):
         self._check_is_string(data_str)
         return int(data_str)
     
-
 class DictParser(AbstractParser):
     def parse(self, data):
         if not isinstance(data, dict):

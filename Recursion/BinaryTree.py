@@ -2,6 +2,7 @@ from Arrays.RecursiveArray import RecursiveArray
 from Elements.Element import Element
 from manim import *
 from Recursion.PositionStrategies import BinaryTreePositioner
+
 class BinaryTree(VGroup):
     """
     Assumes elements are an array represented with a level-order traversal
@@ -72,14 +73,3 @@ class BinaryTree(VGroup):
         if new_element.parent is not None:
             new_element.set_parent_arrow(CurvedArrow(new_element.parent.get_bottom(), new_element.get_top(), angle=0))
         return new_element.create()
-    
-    def delete(self, old_element):
-        pass
-    
-
-
-
-    
-
-
-

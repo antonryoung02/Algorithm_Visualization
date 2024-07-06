@@ -2,7 +2,7 @@ from Elements.Element import Element
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
-from Pointer import Pointer
+from ArrayPointer import Pointer
 from Animator import Animator
 # PYTHONPATH=$(pwd) manim -pql Arrays/TestArray.py ArrayTestScene
 class ArrayTestScene(Scene):

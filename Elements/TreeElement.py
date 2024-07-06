@@ -26,7 +26,6 @@ class TreeNode(Element):
             return FadeIn(self.parent_arrow)
         return Transform(prev_arrow, self.parent_arrow)
 
-    
     def set_right_child(self, new_child):
         self.right_child = new_child
         new_child.parent = self

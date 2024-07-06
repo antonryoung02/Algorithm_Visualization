@@ -2,7 +2,7 @@ from Elements.Element import Element
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
-from Pointer import Pointer
+from ArrayPointer import Pointer
 from Animator import Animator
 from Recursion.Recursion import Recursion
 from Recursion.PositionStrategies import OneChildPositioner
@@ -33,13 +33,13 @@ class BinarySearchScene(MovingCameraScene):
 
     def binary_search(self, array, nums, target, i, j, level):
         if j - i == 0:
-            self.play(self.a.check_is_equal(0, target, array.current_subproblem))
+            self.play(self.a.check_is_equal(0, target, ))
             return -1 if nums[i] != target else i
         
         midpoint = (j + i) // 2
         array_mdpt = array.current_subproblem.get_midpt()
 
-        self.play(self.a.check_size(array_mdpt, target, array.current_subproblem))
+        self.play(self.a.check_size(array.current_subproblem.elements[array_mdpt], target))
         if nums[midpoint] > target:
             self.play(
                 self.a.set_group_element_styles(range(array_mdpt), array.current_subproblem, self.marked_styles), 
@@ -53,7 +53,7 @@ class BinarySearchScene(MovingCameraScene):
             )
             return self.binary_search(array, nums, target, midpoint + 1, j, level+1)
         else:
-            self.play(self.a.check_is_equal(array_mdpt, target, array.current_subproblem))
+            self.play(self.a.check_is_equal(array.current_subproblem.elements[array_mdpt], target))
             return midpoint
 
 s = BinarySearchScene()

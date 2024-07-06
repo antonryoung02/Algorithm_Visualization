@@ -2,14 +2,14 @@ from Elements.Element import Element
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
-from Pointer import Pointer
+from ArrayPointer import Pointer
 from Animator import Animator
 from Recursion.Recursion import Recursion
 from Recursion.BinaryTree import BinaryTree
 from Elements.TreeElement import TreeNode
 from Recursion.PositionStrategies import BinaryTreePositioner
 from Utils.TreeDS import binary_tree_from_list
-from Indicator import Indicator
+from TreeIndicator import Indicator
 from Windows.CodeWindow import CodeWindow
 from  Callbacks.ElementCallbacks import zoomToElementCallback, displayCodeElementCallback
 code = """

@@ -2,7 +2,7 @@ from Elements.Element import Element
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
-from Pointer import Pointer
+from ArrayPointer import Pointer
 from Animator import Animator
 from Recursion.Recursion import Recursion
 from Windows.CodeWindow import CodeWindow
@@ -63,11 +63,11 @@ class MyScene(MovingCameraScene):
             curr_sum = numbers[i] + numbers[j]
             self.play(self.a.move_element_data_to_other(array.elements[i], window_arr[0]), self.a.move_element_data_to_other(array.elements[j], window_arr[0]), window_arr[0].set_data(curr_sum), code_window.highlight(6))
             if curr_sum > target:
-                self.play(code_window.highlight(7), self.a.compare_size(0, 1, window_arr))
+                self.play(code_window.highlight(7), self.a.compare_size(window_arr.elements[0], window_arr.elements[1]))
                 j -= 1
                 self.play(code_window.highlight(8), jp.update(j))
             elif curr_sum < target:
-                self.play(code_window.highlight(9), self.a.compare_size(0, 1, window_arr))
+                self.play(code_window.highlight(9), self.a.compare_size(window_arr.elements[0], window_arr.elements[1]))
                 i += 1
                 self.play(code_window.highlight(10), ip.update(i))
             else:

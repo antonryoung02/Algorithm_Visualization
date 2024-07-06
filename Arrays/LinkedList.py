@@ -81,7 +81,7 @@ class LinkedList(AbstractArray):
         self, index: int, data=None, style=None
     ) -> AnimationGroup:
         """Visibly changes the element's value at index"""
-        if self._index_in_bounds(index) == False:
+        if index < 0 or index >= (len(self.elements) / 2):
             return AnimationGroup(Wait(0.1))
         animations = []
         if data:
@@ -90,9 +90,6 @@ class LinkedList(AbstractArray):
             animations.append(self.elements[2*index].set_style(style))
 
         return AnimationGroup(*animations)
-
-    def _index_in_bounds(self, index):
-        return 0 <= index < (len(self.elements) / 2)
     
     def _shift_at_index(self, index: int, direction) -> AnimationGroup:
         """Helper method used in appending/deleting element."""
@@ -143,8 +140,3 @@ class LinkedList(AbstractArray):
         self.elements.insert(2 * index + 1, new_arrow)
 
         return Succession(step_one_animations, Wait(0.2), step_two_animations)
-
-    def get_element_at_index(self, index):
-        if self._index_in_bounds(index):
-            return self.elements[2*index]
-        return -1    

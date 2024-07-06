@@ -2,7 +2,7 @@ from Elements.Element import Element
 from Arrays.Array import Array
 from Arrays.LinkedList import LinkedList
 from manim import * 
-from Pointer import Pointer
+from ArrayPointer import Pointer
 from Animator import Animator
 from Recursion.Recursion import Recursion
 from Recursion.PositionStrategies import OneChildPositioner, TwoChildrenPositioner
@@ -84,7 +84,7 @@ class MergesortScene(MovingCameraScene):
         combined_data = []
 
         while l < len(left_data) and r < len(right_data):
-            self.play(self.code_window.highlight(12), self.a.compare_size(l, r, left_child, right_child))
+            self.play(self.code_window.highlight(12), self.a.compare_size(left_child.elements[l], right_child.elements[r]))
             if left_data[l] < right_data[r]:
                 self.play(self.code_window.highlight(13), array.current_subproblem.elements[l+r].set_data(left_data[l]))
                 combined_data.append(left_data[l])

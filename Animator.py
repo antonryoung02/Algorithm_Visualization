@@ -6,30 +6,26 @@ class Animator:
         self.scene = scene
     """Handles animations for all Element/Array types"""
     
-    def compare_if_equal(self, index1, index2, array1, array2=None):
-        element1 = array1.get_element_at_index(index1)
-        if array2 is None:
-            element2 = array1.get_element_at_index(index2)
-        else:
-            element2 = array2.get_element_at_index(index2)
-
+    def compare_if_equal(self, element1, element2):
+        if element1 is None or element2 is None:
+            return Wait(0)
         shape_color = GREEN if element1.equals(element2) else RED
         animation1 = AnimatedBoundary(element1.shape, colors=[shape_color])
         animation2 = AnimatedBoundary(element2.shape, colors=[shape_color])
         return Succession(AnimationGroup(FadeIn(animation1), FadeIn(animation2)), Wait(0.4), AnimationGroup(FadeOut(animation1), FadeOut(animation2)))
 
-    def check_is_equal(self, index, val, array):
-        element = array.get_element_at_index(index)
+    def check_is_equal(self, element, val):
+        if element is None:
+            return Wait(0)
         shape_color = GREEN if element.equals(val) else RED
         animation = AnimatedBoundary(element.shape, colors=[shape_color]) 
         return Succession(FadeIn(animation), Wait(0.4), FadeOut(animation))
     
-    def check_size(self, index, val, array):
-        element = array.get_element_at_index(index)
-
+    def check_size(self, element, val):
+        if element is None:
+            return Wait(0)
         if element.equals(val):
-            return self.indicate(index, array)
-
+            return self.indicate(element)
         if element.greater_than(val):
             return Succession(
                 AnimationGroup(element.shape.animate.scale(1.2)), 
@@ -42,22 +38,16 @@ class Animator:
             AnimationGroup(element.shape.animate.scale(1))
         ) 
 
-    def indicate(self, index, array):
-        element = array.get_element_at_index(index)
-        if element:
-            return Indicate(element.shape, run_time=1)
-        return Wait(0.1)
+    def indicate(self, element):
+        if element is None:
+            return Wait(0)
+        return Indicate(element.shape, run_time=1)
     
-    def compare_size(self, index1, index2, array1, array2=None):
-        element1 = array1.get_element_at_index(index1)
-        element2 = array1.get_element_at_index(index2) if array2 is None else array2.get_element_at_index(index2)
-
+    def compare_size(self, element1, element2):
+        if element1 is None or element2 is None:
+            return Wait(0)
         if element1.equals(element2):
-            return AnimationGroup(
-                self.indicate(index1, array1),
-                self.indicate(index2, array2 if array2 else array1)
-            )
-
+            return Wait(0)
         if element1.greater_than(element2):
             return Succession(
                 AnimationGroup(element1.shape.animate.scale(1.2), element2.shape.animate.scale(0.8)), 
@@ -74,7 +64,7 @@ class Animator:
         return AnimationGroup(*[element.animate.set_color(color) for element in array.elements])
 
     def set_group_element_styles(self, indices_list, array, new_style):
-        return AnimationGroup(*[array.get_element_at_index(index).set_style(new_style) for index in indices_list]) 
+        return AnimationGroup(*[array.elements[index].set_style(new_style) for index in indices_list]) 
 
     def move_element_data_to_other(self, element, other, color=None):
         moving_data = element.data.copy()
@@ -93,7 +83,7 @@ class Animator:
         for new_index, (old_index, val) in enumerate(sorted_vals):
             element = array.elements[old_index]
             arc = (1 - random.random()) * 90 * DEGREES
-            animations.append(Transform(element, element.copy().move_to(array.get_element_at_index(new_index)), path_arc=arc))
+            animations.append(Transform(element, element.copy().move_to(array.elements[new_index]), path_arc=arc))
 
         reordered_elements = [array.elements[old_index] for old_index, _ in sorted_vals]
         array.elements = reordered_elements
