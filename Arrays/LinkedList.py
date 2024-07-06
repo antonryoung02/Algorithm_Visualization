@@ -24,7 +24,7 @@ class LinkedList(AbstractArray):
 
     def create(self):
         if len(self.elements) == 0:
-            return Wait(0.1)
+            return Wait(0)
         return AnimationGroup(*[FadeIn(obj) for obj in self.elements])
 
     def _unlink(self, index):
@@ -48,7 +48,7 @@ class LinkedList(AbstractArray):
             link_next_element = Transform(prev_arrow, original_arrow_shape)
             return unlink_current_element, link_next_element
         else:
-            return Wait(0.1), Wait(0.1)
+            return Wait(0), Wait(0)
 
     def remove_element(self, index, animation_length=1):
         # Validate index
@@ -82,7 +82,7 @@ class LinkedList(AbstractArray):
     ) -> AnimationGroup:
         """Visibly changes the element's value at index"""
         if index < 0 or index >= (len(self.elements) / 2):
-            return AnimationGroup(Wait(0.1))
+            return AnimationGroup(Wait(0))
         animations = []
         if data:
             animations.append(self.elements[2*index].set_data(data))
@@ -93,7 +93,7 @@ class LinkedList(AbstractArray):
     
     def _shift_at_index(self, index: int, direction) -> AnimationGroup:
         """Helper method used in appending/deleting element."""
-        shift_animations = [Wait(0.1)]
+        shift_animations = [Wait(0)]
         shift_distance = 1.6
         for i in range(index, len(self.elements)):
             shift_animations.append(self.elements[i].animate.shift(direction * shift_distance + 2 * direction * self.gap))

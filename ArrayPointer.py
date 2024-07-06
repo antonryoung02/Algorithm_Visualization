@@ -42,7 +42,7 @@ class Pointer(VGroup):
 
     def update(self, index: int):
         """Sets pointer index and returns moving animation"""
-        visit_end_animations = Wait(0.1)
+        visit_end_animations = Wait(0)
         if self.current_element:
             visit_end_animations = self.current_element.call_callback_hooks("on_visit_end")
 
@@ -67,7 +67,7 @@ class Pointer(VGroup):
 
     def delete(self) -> AnimationGroup:
         """Pointer removes itself from the scene"""
-        visit_end_animations = Wait(0.1)
+        visit_end_animations = Wait(0)
         if self.current_element:
             visit_end_animations = self.current_element.call_callback_hooks("on_visit_end")
         if self.text:

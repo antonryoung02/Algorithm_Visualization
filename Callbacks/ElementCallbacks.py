@@ -98,9 +98,9 @@ class ShowDataChangeElementCallback(Callback):
         self.new_data = element.get_data()
         original_color = element.shape.get_color()
         if self.old_data < self.new_data:
-            return Succession(AnimationGroup(element.shape.animate.scale(1.1)), Wait(0.1), AnimationGroup(element.shape.animate.scale(1)))
+            return Succession(AnimationGroup(element.shape.animate.scale(1.1)), Wait(0), AnimationGroup(element.shape.animate.scale(1)))
         elif self.old_data > self.new_data:
-            return Succession(AnimationGroup(element.shape.animate.scale(0.9)), Wait(0.1), AnimationGroup(element.shape.animate.scale(1)))
+            return Succession(AnimationGroup(element.shape.animate.scale(0.9)), Wait(0), AnimationGroup(element.shape.animate.scale(1)))
         else:
             return Wait(0)
 

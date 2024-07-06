@@ -26,7 +26,7 @@ class Indicator(VGroup):
             self.tree.current_node = current_node.left_child
             start_visit_animations = current_node.left_child.call_callback_hooks("on_visit_start")
             return Succession(end_visit_animations, self.animate.move_to(self.tree.current_node), start_visit_animations)
-        return Wait(0.1)
+        return Wait(0)
 
     def go_right(self):
         current_node = self.tree.current_node
@@ -35,7 +35,7 @@ class Indicator(VGroup):
             self.tree.current_node = current_node.right_child
             start_visit_animations = current_node.right_child.call_callback_hooks("on_visit_start")
             return Succession(end_visit_animations, self.animate.move_to(self.tree.current_node), start_visit_animations)
-        return Wait(0.1)
+        return Wait(0)
 
     def go_up(self):
         current_node = self.tree.current_node
@@ -44,7 +44,7 @@ class Indicator(VGroup):
             self.tree.current_node = current_node.parent
             start_visit_animations = current_node.parent.call_callback_hooks("on_visit_start")
             return Succession(end_visit_animations, self.animate.move_to(self.tree.current_node), start_visit_animations)
-        return Wait(0.1)
+        return Wait(0)
     
     def set_style(self, style):
         self.style = style

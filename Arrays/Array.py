@@ -35,7 +35,7 @@ class Array(AbstractArray):
     def create(self) -> list[FadeIn]:
         """Returns a list of animations to play when the array is first created"""
         if len(self.elements) == 0:
-            return Wait(0.1)
+            return Wait(0)
         return AnimationGroup(*[element.create() for element in self.elements])
 
     def insert_element(self, index, new_element, animation_length: float = 0.5) -> Succession:
@@ -55,7 +55,7 @@ class Array(AbstractArray):
     def remove_element(self, index,animation_length=0.5) -> Succession:
         """Deletes the element at the given index and shifts elements after index"""
         if index < 0 or index >= len(self.elements):
-            return Succession(Wait(0.1))
+            return Succession(Wait(0))
         
         element = self.elements[index]
         shift_animations = self._shift_at_index(index, LEFT)
@@ -68,7 +68,7 @@ class Array(AbstractArray):
 
     def _shift_at_index(self, index: int, direction) -> AnimationGroup:
         """Helper method used in appending/deleting element."""
-        shift_animations = [Wait(0.1)]
+        shift_animations = [Wait(0)]
         for i in range(index, len(self)):
             shift_animations.append(self[i].animate.shift(direction * 2 * self.element_length + 2 * direction * self.gap))
         return AnimationGroup(*shift_animations)

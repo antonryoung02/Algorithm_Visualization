@@ -29,12 +29,12 @@ class Animator:
         if element.greater_than(val):
             return Succession(
                 AnimationGroup(element.shape.animate.scale(1.2)), 
-                Wait(0.1),
+                Wait(0),
                 AnimationGroup(element.shape.animate.scale(1))
             )
         return Succession(
             AnimationGroup(element.shape.animate.scale(0.8)), 
-            Wait(0.1),
+            Wait(0),
             AnimationGroup(element.shape.animate.scale(1))
         ) 
 
@@ -51,12 +51,12 @@ class Animator:
         if element1.greater_than(element2):
             return Succession(
                 AnimationGroup(element1.shape.animate.scale(1.2), element2.shape.animate.scale(0.8)), 
-                Wait(0.1),
+                Wait(0),
                 AnimationGroup(element1.shape.animate.scale(1), element2.shape.animate.scale(1))
             )
         return Succession(
             AnimationGroup(element2.shape.animate.scale(1.2), element1.shape.animate.scale(0.8)), 
-            Wait(0.1),
+            Wait(0),
             AnimationGroup(element2.shape.animate.scale(1), element1.shape.animate.scale(1))
         ) 
 
@@ -92,14 +92,14 @@ class Animator:
     def show_increase_element_data(self, element):
         return Succession(
             element.data.animate.scale(1.2), 
-            Wait(0.1),
+            Wait(0),
             element.data.animate.scale(1)
         )
 
     def show_decrease_element_data(self, element):
         return Succession(
             element.data.animate.scale(0.8), 
-            Wait(0.1),
+            Wait(0),
             element.data.animate.scale(1)
         )
 
