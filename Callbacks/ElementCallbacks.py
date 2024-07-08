@@ -1,7 +1,6 @@
 from manim import *
 
 class Callback:
-
     def on_create(self, element):
         return Wait(0)
 
@@ -44,13 +43,14 @@ class displayCodeRecursionCallback(Callback):
   
     def on_visit_start(self, recursion):
         if self._num_visited_subarrays in self.display_indices:
-            self.code_window.code.next_to(recursion.current_subproblem, self.orientation)
-            return AnimationGroup(self.code_window.animate.set_opacity(1))
+            self.code_window.code.next_to(recursion.current_subproblem, self.orientation, buff=0.5)
+            return self.code_window.animate.set_opacity(1)
         return Wait(0)
     
     def on_visit_end(self, recursion):
         self._num_visited_subarrays += 1
-        return self.code_window.animate.set_opacity(0)
+        self.code_window.set_opacity(0)
+        return Wait(0)
 
 class displayCodeElementCallback(Callback):
     def __init__(self, code_window, orientation=LEFT):
@@ -76,11 +76,13 @@ class zoomToRecursionCallback(Callback):
         self.zoom_factor = zoom_factor
   
     def on_visit_start(self, recursion):
-        if self._num_visited_subarrays in self.display_indices:
+        if self._num_visited_subarrays in self.display_indices or len(self.display_indices) == 0:
             return self.scene.camera.frame.animate.move_to(recursion.current_subproblem).set(width=min(recursion.current_subproblem.get_width(), recursion.current_subproblem.get_height()) * self.zoom_factor)
         return Wait(0)
     
     def on_visit_end(self, recursion):
+        if len(self.display_indices) == 0:
+            return Wait(0)
         self._num_visited_subarrays += 1
         return self.scene.camera.frame.animate.move_to(ORIGIN).set(width=config.frame_width)
 
@@ -103,7 +105,7 @@ class ShowDataChangeElementCallback(Callback):
             return Succession(AnimationGroup(element.shape.animate.scale(0.9)), Wait(0), AnimationGroup(element.shape.animate.scale(1)))
         else:
             return Wait(0)
-
+    
 class ShowVisitCompleteElementCallback(Callback):
     def __init__(self, color=GRAY_BROWN):
         super().__init__()

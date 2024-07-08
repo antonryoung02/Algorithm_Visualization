@@ -23,8 +23,8 @@ class AbstractParser(ABC):
 
 class IntParser(AbstractParser):
     def parse(self, data):
-        if not isinstance(data, int):
-            raise TypeError(f"IntParser got data type: {type(data)}")
+        # if not isinstance(data, int):
+        #     raise TypeError(f"IntParser got data type: {type(data)}")
         return str(data)
     
     def invert_parse(self, data_str):
@@ -51,8 +51,8 @@ class DictParser(AbstractParser):
 
 class StringParser(AbstractParser):
     def parse(self, data):
-        if not isinstance(data, str):
-            raise TypeError(f"StringParser got data type: {type(data)}")
+        # if not isinstance(data, str):
+        #     raise TypeError(f"StringParser got data type: {type(data)}")
         return data
     
     def invert_parse(self, data_str):

@@ -67,6 +67,20 @@ class Recursion(VGroup):
         visit_start_animations = self.call_callback_hooks("on_visit_start")
         return Succession(visit_end_animations, AnimationGroup(arrow_animation), visit_start_animations)
     
+    def replace_current_subproblem(self, new_elements):
+        old_subproblem_animation = FadeOut(self.current_subproblem)
+        new_subproblem = RecursiveArray(new_elements, parent=self.current_subproblem.parent)
+        new_subproblem.move_to(self.current_subproblem.get_center())
+        
+        if self.current_subproblem.parent is not None:
+            subproblem_index = self.current_subproblem.parent.children.index(self.current_subproblem)
+            self.current_subproblem.parent.children[subproblem_index] = new_subproblem
+            new_subproblem.parent_arrow = self.current_subproblem.parent_arrow
+        self.current_subproblem = new_subproblem
+        
+        return AnimationGroup(old_subproblem_animation, FadeIn(new_subproblem))
+        
+    
     def call_callback_hooks(self, method_name):
         animations = []
         for callback in self.callbacks:

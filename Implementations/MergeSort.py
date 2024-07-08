@@ -8,7 +8,7 @@ from Recursion.Recursion import Recursion
 from Recursion.PositionStrategies import OneChildPositioner, TwoChildrenPositioner
 from Callbacks.ElementCallbacks import zoomToElementCallback, displayCodeRecursionCallback, zoomToRecursionCallback
 from Windows.CodeWindow import CodeWindow
-# PYTHONPATH=$(pwd) manim -pql --disable_caching Implementations/MergeSort.py MergesortScene
+# PYTHONPATH=$(pwd) manim Implementations/MergeSort.py MergesortScene
 
 code = """
     def merge_sort(self, array, i, j):
@@ -42,14 +42,14 @@ class MergesortScene(MovingCameraScene):
         self.a = Animator(self)
         self.element_style={Square:{"side_length":0.8}, Text:{"font_size":30}}
         self.window_element_style={Rectangle:{"width":3, "height":1}, Text:{"font_size":26}}
-        self.code_window = CodeWindow(code).set_opacity(0)
+        self.code_window = CodeWindow(code, scale_bg_height=1.8).set_opacity(0).scale(0.9)
 
     def construct(self):
         data = ["3", "1", "8", "4", "6", "5", "9", "7"]
         elements = [Element(i, Square(), self.element_style, []) for i in data]
         recursion_positioner = TwoChildrenPositioner(1.3, 0.9)
-        recursion_callback = displayCodeRecursionCallback(self.code_window, [1, 5, 6, 10], LEFT)
-        recursion_zoom_callback = zoomToRecursionCallback(self, [1,5,6,10], 16)
+        recursion_callback = displayCodeRecursionCallback(self.code_window, [1, 7, 13], LEFT)
+        recursion_zoom_callback = zoomToRecursionCallback(self, [1,7,13], 16)
         r = Recursion(elements, recursion_positioner, [recursion_zoom_callback, recursion_callback])
         self.play(r.create(), self.code_window.create())
         self.recursion(r, data, 0, len(data)-1, 0)
@@ -63,12 +63,10 @@ class MergesortScene(MovingCameraScene):
         
         midpt = (i + j) // 2 
         self.play(self.code_window.highlight(6))
-        self.play(self.code_window.highlight(7))
-        self.play(array.divide_array(array.current_subproblem, level, i, midpt))
+        self.play(Succession(self.code_window.highlight(7), array.divide_array(array.current_subproblem, level, i, midpt)))
         left_data = self.recursion(array, data, i, midpt, level + 1)
 
-        self.play(self.code_window.highlight(8))
-        self.play(array.divide_array(array.current_subproblem, level, midpt+1, j))
+        self.play(Succession(self.code_window.highlight(8), array.divide_array(array.current_subproblem, level, midpt+1, j)))
         right_data = self.recursion(array, data, midpt+1, j, level + 1)
 
         left_child = array.current_subproblem.children[0]
@@ -84,28 +82,28 @@ class MergesortScene(MovingCameraScene):
         combined_data = []
 
         while l < len(left_data) and r < len(right_data):
-            self.play(self.code_window.highlight(12), self.a.compare_size(left_child.elements[l], right_child.elements[r]))
+            self.play(self.code_window.highlight([11,12]), self.a.compare_size(left_child.elements[l], right_child.elements[r]))
             if left_data[l] < right_data[r]:
                 self.play(self.code_window.highlight(13), array.current_subproblem.elements[l+r].set_data(left_data[l]))
                 combined_data.append(left_data[l])
                 l += 1
                 self.play(self.code_window.highlight(14), pp.update(l+r), lp.update(l))
             else:
-                self.play(self.code_window.highlight(16), array.current_subproblem.elements[l + r].set_data(right_data[r]))
+                self.play(self.code_window.highlight([15,16]), array.current_subproblem.elements[l + r].set_data(right_data[r]))
                 combined_data.append(right_data[r])
                 r += 1
                 self.play(self.code_window.highlight(17), pp.update(l+r), rp.update(r))
 
         while l < len(left_data):
             #self.play(self.a.indicate(l, left_child))
-            self.play(self.code_window.highlight(19), array.current_subproblem.elements[l + r].set_data(left_data[l]))
+            self.play(self.code_window.highlight([18,19]), array.current_subproblem.elements[l + r].set_data(left_data[l]))
             combined_data.append(left_data[l])
             l += 1
             self.play(self.code_window.highlight(20), pp.update(l+r), lp.update(l))
 
         while r < len(right_data):
             #self.play(self.a.indicate(r, right_child))
-            self.play(self.code_window.highlight(22), array.current_subproblem.elements[l+r].set_data(right_data[r]))
+            self.play(self.code_window.highlight([21,22]), array.current_subproblem.elements[l+r].set_data(right_data[r]))
             combined_data.append(right_data[r])
             r += 1
             self.play(self.code_window.highlight(23), pp.update(l+r), rp.update(r))

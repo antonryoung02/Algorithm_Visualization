@@ -10,6 +10,8 @@ from Recursion.PositionStrategies import OneChildPositioner
 code = """
 
 """
+# TODO FIX LOOKS BAD
+
 
 # PYTHONPATH=$(pwd) manim -pql Implementations/BinarySearch_704.py BinarySearchScene
 class BinarySearchScene(MovingCameraScene):

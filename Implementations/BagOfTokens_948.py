@@ -16,7 +16,6 @@ class Solution:
         rp = len(tokens) - 1
         max_score = 0
         tokens.sort()
-        
         while lp <= rp:
             if power >= tokens[lp]:
                 power -= tokens[lp]
@@ -54,9 +53,9 @@ class MyScene(MovingCameraScene):
 
         power = 12
 
-        score_element = Element(0, Rectangle(), self.window_element_style, callbacks=[])
-        max_score_element = Element(0, Rectangle(), self.window_element_style, callbacks=[]) 
-        power_element = Element(power, Rectangle(), self.window_element_style, callbacks=[])
+        score_element = Element("0", Rectangle(), self.window_element_style)
+        max_score_element = Element("0", Rectangle(), self.window_element_style) 
+        power_element = Element(str(power), Rectangle(), self.window_element_style)
         window_arr = Array([power_element, score_element, max_score_element]).move_to(array).shift(2.2*DOWN)
         score_text = Text("score", font=self.font, font_size=24).next_to(window_arr[1], DOWN)
         max_score_text = Text("max_score", font=self.font, font_size=24).next_to(window_arr[2], DOWN)
@@ -79,31 +78,34 @@ class MyScene(MovingCameraScene):
 
         while i <= j:
             if power >= numbers[i]:
-                self.play(code_window.highlight(10))
+                self.play(code_window.highlight([8,9]))
                 power -= numbers[i]
                 i += 1
                 score += 1
-                self.play(code_window.highlight([11,12,13]), 
+                self.play(code_window.highlight([10,11,12]), 
                           self.a.move_element_data_to_other(array.elements[i-1], window_arr[0], RED), 
-                          window_arr[1].set_data(score), 
-                          ip.update(i), window_arr[0].set_data(power),
+                          window_arr[1].set_data(str(score)),
+                          ip.update(i), 
+                          self.a.show_math_then_set_data(window_arr[0], f"{window_arr[0].get_data()}-{numbers[i-1]}", str(power)),
                           )
                 
                 max_score = max(max_score, score)
-                self.play(code_window.highlight(14), window_arr[2].set_data(max_score))
+                self.play(code_window.highlight(13), window_arr[2].set_data(str(max_score)))
             elif score > 0:
-                self.play(code_window.highlight(15))
+                self.play(code_window.highlight([8, 14]))
                 power += numbers[j]
                 j -= 1
                 score -= 1
-                self.play(code_window.highlight([16,17,18]),
-                          window_arr[1].set_data(score), jp.update(j), 
-                          self.a.move_element_data_to_other(array.elements[j+1], window_arr[0], GREEN), window_arr[0].set_data(power))
+                self.play(code_window.highlight([15,16,17]),
+                          window_arr[1].set_data(str(score)),
+                          jp.update(j),
+                          self.a.move_element_data_to_other(array.elements[j+1], window_arr[0], GREEN), 
+                          self.a.show_math_then_set_data(window_arr[0], f"{window_arr[0].get_data()}+{numbers[j+1]}", str(power)),)
             else:
-                self.play(code_window.highlight([19, 20]))
+                self.play(code_window.highlight([18,19]))
                 break
 
-        self.play(code_window.highlight(21))
+        self.play(code_window.highlight(20))
         return max_score
 
 scene = MyScene()

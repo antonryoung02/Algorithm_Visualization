@@ -23,7 +23,7 @@ class Element(AbstractElement):
         self.data = new_data
         after_set_data_animations = self.call_callback_hooks("after_set_data")
 
-        return Succession(before_set_data_animations, ReplacementTransform(old_data, new_data), after_set_data_animations)
+        return Succession(before_set_data_animations, ReplacementTransform(old_data, new_data), after_set_data_animations, lag_ratio=1)
     
     def set_style(self, new_style):
 

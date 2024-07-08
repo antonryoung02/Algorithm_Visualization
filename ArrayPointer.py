@@ -8,7 +8,7 @@ class Pointer(VGroup):
         self.direction = direction
         self._scale = 0.4
         self.name = name
-        self.pointer = Arrow(-1 * direction, direction).scale(self._scale)
+        self.pointer = Arrow(-1 * direction, direction, max_stroke_width_to_length_ratio=10).scale(self._scale)
         self.current_element = None
         self.text = None
         self.add(self.pointer)
@@ -32,7 +32,7 @@ class Pointer(VGroup):
         return AnimationGroup(visit_start_animations, FadeIn(self.pointer), FadeIn(self.text))
     
     def set_style(self, style):
-        new_pointer = Arrow(-1*self.direction, self.direction, **style).scale(self._scale).move_to(self.pointer, -1 * self.direction)
+        new_pointer = Arrow(-1*self.direction, self.direction, max_stroke_width_to_length_ratio=10, **style).scale(self._scale).move_to(self.pointer, -1 * self.direction)
         pointer_transform = ReplacementTransform(self.pointer, new_pointer)
         self.remove(self.pointer)
         self.add(new_pointer)
@@ -76,7 +76,7 @@ class Pointer(VGroup):
         return AnimationGroup(FadeOut(self.pointer), visit_end_animations)
 
     def get_element_at_index(self, index):
-        if self.array._index_in_bounds(index):
-            return self.elements[index]
-        warnings.warn(f"List index {index} out of range for length {len(self.elements)}. Returning None")
+        if index >= 0 and index < len(self.array.elements):
+            return self.array.elements[index]
+        warnings.warn(f"List index {index} out of range for length {len(self.array.elements)}. Returning None")
         return None

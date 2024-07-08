@@ -87,7 +87,7 @@ class Animator:
 
         reordered_elements = [array.elements[old_index] for old_index, _ in sorted_vals]
         array.elements = reordered_elements
-        return AnimationGroup(*animations)
+        return AnimationGroup(*animations, lag_ratio=0.1)
 
     def show_increase_element_data(self, element):
         return Succession(
@@ -102,5 +102,12 @@ class Animator:
             Wait(0),
             element.data.animate.scale(1)
         )
+        
+    def show_math_then_set_data(self, element, math_str, new_data):
+        self.scene.play(element.set_data(math_str))
+        return element.set_data(new_data)
+    
+        
+        
 
-
+    # For graph, add outgoing edge animations

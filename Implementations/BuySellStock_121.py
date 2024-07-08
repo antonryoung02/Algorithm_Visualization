@@ -31,14 +31,14 @@ class MyScene(MovingCameraScene):
         super().__init__(**kwargs)
         self.a = Animator(self)
         self.element_style={Square:{"side_length":0.9}, Text:{"font_size":30}}
-        self.window_element_style={Rectangle:{"width":3, "height":1}, Text:{"font_size":26}}
+        self.window_element_style={Rectangle:{"width":3, "height":1}, Text:{"font_size":30}}
         self.font="Kanit"
 
     def construct(self):
         prices = [5, 12, 3, 1, 6, 5, 9, 7] 
         elements = [Element(p, Square(), self.element_style) for p in prices]
-        code_window = CodeWindow(code).scale(1.3)
-        code_window.to_corner(DOWN).shift(2.5*DOWN)
+        code_window = CodeWindow(code, scale_bg_height=1.7).scale(1.3)
+        code_window.to_corner(DOWN).shift(2.3*DOWN)
 
         array = Array(elements)        
         array.to_corner(UP).shift(3.1*LEFT).shift(UP)
@@ -62,17 +62,15 @@ class MyScene(MovingCameraScene):
             curr_profit = prices[j] - prices[i]
             max_profit = max(max_profit, curr_profit)
 
-            self.play(code_window.highlight(7), self.a.move_element_data_to_other(array.elements[i], window_arr[0]), 
+            self.play(code_window.highlight([6,7]), self.a.move_element_data_to_other(array.elements[i], window_arr[0]), 
                         self.a.move_element_data_to_other(array.elements[j], window_arr[0]),
-                        window_arr[0].set_data(curr_profit))
-
+                        self.a.show_math_then_set_data(window_arr[0], f"{prices[j]} - {prices[i]}", curr_profit))
 
             self.play(self.a.compare_size(window_arr.elements[0], window_arr.elements[1]))
             if max_profit == curr_profit:
                 self.play(code_window.highlight(8), window_arr[1].set_data(curr_profit))
             else:
                 self.play(code_window.highlight(8))
-
 
             if prices[j] < prices[i]:
                 self.play(code_window.highlight([9,10,11]), ip.update(j), jp.update(j+1))
@@ -82,7 +80,7 @@ class MyScene(MovingCameraScene):
                 self.play(code_window.highlight([12, 13]), jp.update(j+1))
                 j += 1
 
-        self.play(code_window.highlight(14), self.a.indicate(window_arr.elements[1]))
+        self.play(code_window.highlight(14))
         return max_profit
 
 s = MyScene()
