@@ -24,9 +24,9 @@ class Recursion(VGroup):
     ) -> AnimationGroup:
         """Recursive divide step, displaying new array made from array[i:j]"""
         if j - i < 0:
-           return Wait(0)
+           return AnimationGroup(Wait(0.1))
         if level > 5:
-            raise RecursionError("divide_array called too many times!")
+            raise RecursionError("divide_array probably called too many times!")
 
         visit_end_animations = Wait(0) 
         if self.current_subproblem is not None:
@@ -75,7 +75,7 @@ class Recursion(VGroup):
         if self.current_subproblem.parent is not None:
             subproblem_index = self.current_subproblem.parent.children.index(self.current_subproblem)
             self.current_subproblem.parent.children[subproblem_index] = new_subproblem
-            new_subproblem.parent_arrow = self.current_subproblem.parent_arrow
+            new_subproblem.set_parent_arrow(self.current_subproblem.parent_arrow)
         self.current_subproblem = new_subproblem
         
         return AnimationGroup(old_subproblem_animation, FadeIn(new_subproblem))

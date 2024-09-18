@@ -82,7 +82,7 @@ class LinkedList(AbstractArray):
     ) -> AnimationGroup:
         """Visibly changes the element's value at index"""
         if index < 0 or index >= (len(self.elements) / 2):
-            return AnimationGroup(Wait(0))
+            return AnimationGroup(Wait(0.1))
         animations = []
         if data:
             animations.append(self.elements[2*index].set_data(data))

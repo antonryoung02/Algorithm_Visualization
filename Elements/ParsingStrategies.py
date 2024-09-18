@@ -27,7 +27,7 @@ class IntParser(AbstractParser):
         #     raise TypeError(f"IntParser got data type: {type(data)}")
         return str(data)
     
-    def invert_parse(self, data_str):
+    def invert_parse(self, data_str) -> int:
         self._check_is_string(data_str)
         return int(data_str)
     
@@ -40,7 +40,7 @@ class DictParser(AbstractParser):
             combined_str += str(key) + " = " + str(data[key]) + "\n"
         return combined_str
 
-    def invert_parse(self, data_str):
+    def invert_parse(self, data_str) -> dict:
         self._check_is_string(data_str)
         data_dict = {}
         lines = data_str.split("\n")
@@ -55,7 +55,7 @@ class StringParser(AbstractParser):
         #     raise TypeError(f"StringParser got data type: {type(data)}")
         return data
     
-    def invert_parse(self, data_str):
+    def invert_parse(self, data_str) -> str:
         self._check_is_string(data_str)
         return data_str
     

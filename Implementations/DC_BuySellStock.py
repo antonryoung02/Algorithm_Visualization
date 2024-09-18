@@ -61,6 +61,7 @@ class MyScene(MovingCameraScene):
         self.play(array.divide_array(array.current_subproblem, level, midpt+1, j))
         right_profit, right_min, right_max = self.recursion(array, data, midpt+1, j, level + 1)
 
+        # Data dict parser has to return multiple Text objects
         max_prof = max(left_profit, right_profit, right_max - left_min)
         min_val = min(right_min, left_min)
         max_val = max(right_max, left_max)

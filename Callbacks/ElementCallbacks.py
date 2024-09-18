@@ -67,7 +67,7 @@ class displayCodeElementCallback(Callback):
         self._num_visited_subarrays += 1
         return self.code_window.animate.set_opacity(0)
     
-class zoomToRecursionCallback(Callback):
+class zoomInRecursionCallback(Callback):
     def __init__(self, scene, display_indices, zoom_factor):
         super().__init__()
         self.scene = scene
@@ -79,7 +79,15 @@ class zoomToRecursionCallback(Callback):
         if self._num_visited_subarrays in self.display_indices or len(self.display_indices) == 0:
             return self.scene.camera.frame.animate.move_to(recursion.current_subproblem).set(width=min(recursion.current_subproblem.get_width(), recursion.current_subproblem.get_height()) * self.zoom_factor)
         return Wait(0)
-    
+
+class zoomOutRecursionCallback(Callback):
+    def __init__(self, scene, display_indices, zoom_factor):
+        super().__init__()
+        self.scene = scene
+        self._num_visited_subarrays = 0
+        self.display_indices = display_indices
+        self.zoom_factor = zoom_factor
+         
     def on_visit_end(self, recursion):
         if len(self.display_indices) == 0:
             return Wait(0)

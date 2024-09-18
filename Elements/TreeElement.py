@@ -2,7 +2,7 @@ from Elements.Element import Element
 from manim import *
 
 class TreeNode(Element):
-    def __init__(self, data, shape=Circle, style={Circle:{}, Text:{}}, callbacks=[], **kwargs):
+    def __init__(self, data, shape=Circle(), style={Circle:{}, Text:{}}, callbacks=[], **kwargs):
         super().__init__(data, shape, style, callbacks, **kwargs)
         self.parent = None
         self.parent_arrow = None

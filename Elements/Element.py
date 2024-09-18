@@ -3,13 +3,14 @@ from Elements.AbstractElement import AbstractElement
 from Elements.ParsingFactories import ParserFactory
 
 class Element(AbstractElement):
-    def __init__(self, data, shape=Square, style={Square:{}, Text:{}}, callbacks=[], **kwargs):
+    def __init__(self, data, shape:VMobject=Square(), style={Square:{}, Text:{}}, callbacks=[], **kwargs):
         super().__init__(**kwargs)
         self._ensure_valid_init(shape, style, callbacks)
         self.style = style
         self.callbacks = callbacks
         self.shape = type(shape)(**self.style[type(shape)])
         self.parser = ParserFactory().create_parser(data)
+        # Element from DictParser may have to be its own derived class
         self.data = Text(self.parser.parse(data), **self.style[Text])
         self.add(self.shape, self.data)
 
@@ -72,6 +73,7 @@ class Element(AbstractElement):
         if isinstance(other, Element):
             return self.parser.invert_parse(self.data.text) > other.parser.invert_parse(other.data.text)
         return self.parser.invert_parse(self.data.text) > self.parser.invert_parse(str(other))
+    
     
     def call_callback_hooks(self, method_name):
         animations = []

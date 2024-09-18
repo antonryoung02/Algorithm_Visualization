@@ -15,10 +15,26 @@ class GraphElement(Element):
     
     def add_outgoing_edge(self, new_edge):
         self.outgoing_edges.append(new_edge)
+        print(new_edge)
         start_pt, end_pt = self._get_arrow_start_end_coordinates(self, new_edge[0]) 
         new_arrow = CurvedArrow(start_pt, end_pt)
+        
+        direction = self._nudge_edge_weight(new_arrow)
+        edge_weight = Text(str(new_edge[1]), font_size=24).next_to(new_arrow.get_midpoint(), direction)
+        edge_animation = FadeIn(edge_weight) 
+            
         self.add(new_arrow)
-        return FadeIn(new_arrow)
+        return AnimationGroup(edge_animation, FadeIn(new_arrow))
+    
+    def _nudge_edge_weight(self, arrow):
+        # Is the arrow drawn vertically? Nudge left. Is it drawn horizontally? Nudge down
+        start = arrow.get_start()
+        end = arrow.get_end()
+        diff = start - end
+        if abs(diff[0]) > abs(diff[1]):
+            return DOWN
+        return LEFT
+        
     
     def _get_arrow_start_end_coordinates(self, origin, destination):
         #print(f"Got shape locations: {origin_shape.get_center()} and {destination_shape.get_center()}")
@@ -47,7 +63,7 @@ class GraphElement(Element):
 
 
     def create(self):
-        return FadeIn(self)
+        return AnimationGroup(FadeIn(self.shape), FadeIn(self.data))
     
     def delete(self):
         return FadeOut(self)

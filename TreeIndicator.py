@@ -9,8 +9,16 @@ class Indicator(VGroup):
         self.add(self.shape)
 
     def set_current_node(self, new_node):
-        self.tree.current_node = new_node
-        return self.shape.animate.move_to(new_node)
+        if not new_node:
+            return Wait(0.1)
+        target = new_node.val
+        curr = None
+        for element in self.tree.elements:
+            if element.parser.invert_parse(element.data.text) == target:
+                curr = element
+                break
+        self.tree.current_node = curr
+        return self.shape.animate.move_to(curr)
 
     def create(self):
         self.move_to(self.tree.current_node)
@@ -18,7 +26,7 @@ class Indicator(VGroup):
     
     def delete(self):
         return FadeOut(self.shape)
-    
+   
     def go_left(self):
         current_node = self.tree.current_node
         if current_node.left_child is not None:

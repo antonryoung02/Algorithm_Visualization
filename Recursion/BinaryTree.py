@@ -62,6 +62,8 @@ class BinaryTree(VGroup):
 
         self.elements[i] = new_element
         new_element.parent = self._calculate_parent_with_index(i)
+        if not new_element.parent:
+            return
 
         if new_element.parent.left_child is None:
             new_element.parent.set_left_child(new_element)

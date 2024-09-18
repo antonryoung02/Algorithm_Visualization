@@ -1,5 +1,5 @@
 class BinaryTreePositioner:
-    def __init__(self, vertical_spacing=1, horizontal_spacing=4, depth_spacing=1.8):
+    def __init__(self, vertical_spacing=1.0, horizontal_spacing=4.0, depth_spacing=1.8):
         self.vertical_spacing = vertical_spacing
         self.horizontal_spacing = horizontal_spacing
         self.depth_spacing = depth_spacing
@@ -26,7 +26,7 @@ class BinaryTreePositioner:
         return 0
     
 class TwoChildrenPositioner:
-    def __init__(self, vertical_spacing=1.5, horizontal_spacing=1):
+    def __init__(self, vertical_spacing=1.5, horizontal_spacing=1.0):
         self.vertical_spacing = vertical_spacing
         self.horizontal_spacing = horizontal_spacing
 

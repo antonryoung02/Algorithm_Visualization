@@ -22,6 +22,8 @@ def depth_of_tree(root):
 
 """ 
 
+# TODO FIX WHEN BINARY TREE IMPROVED
+
 # PYTHONPATH=$(pwd) manim -pql Implementations/DepthFirstSearch.py DFSScene
 class DFSScene(MovingCameraScene):
     def __init__(self, **kwargs):

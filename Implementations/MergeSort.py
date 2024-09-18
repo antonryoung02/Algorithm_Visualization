@@ -6,7 +6,7 @@ from ArrayPointer import Pointer
 from Animator import Animator
 from Recursion.Recursion import Recursion
 from Recursion.PositionStrategies import OneChildPositioner, TwoChildrenPositioner
-from Callbacks.ElementCallbacks import zoomToElementCallback, displayCodeRecursionCallback, zoomToRecursionCallback
+from Callbacks.ElementCallbacks import zoomToElementCallback, displayCodeRecursionCallback
 from Windows.CodeWindow import CodeWindow
 # PYTHONPATH=$(pwd) manim Implementations/MergeSort.py MergesortScene
 
@@ -49,8 +49,7 @@ class MergesortScene(MovingCameraScene):
         elements = [Element(i, Square(), self.element_style, []) for i in data]
         recursion_positioner = TwoChildrenPositioner(1.3, 0.9)
         recursion_callback = displayCodeRecursionCallback(self.code_window, [1, 7, 13], LEFT)
-        recursion_zoom_callback = zoomToRecursionCallback(self, [1,7,13], 16)
-        r = Recursion(elements, recursion_positioner, [recursion_zoom_callback, recursion_callback])
+        r = Recursion(elements, recursion_positioner, [recursion_callback])
         self.play(r.create(), self.code_window.create())
         self.recursion(r, data, 0, len(data)-1, 0)
 
