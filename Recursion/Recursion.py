@@ -16,12 +16,12 @@ class Recursion(VGroup):
         self.root = None
         self.current_subproblem = None
 
-    def create(self) -> AnimationGroup:
+    def create(self) -> AnimationGroup | None:
         return self.divide_array(None, 0, 0, len(self.elements) - 1)
 
     def divide_array(
-        self, parent: RecursiveArray, level: int, i: int, j: int
-    ) -> AnimationGroup:
+        self, parent: RecursiveArray | None, level: int, i: int, j: int
+    ) -> AnimationGroup | None:
         """Recursive divide step, displaying new array made from array[i:j]"""
         if j - i < 0:
            return AnimationGroup(Wait(0.1))
@@ -29,7 +29,7 @@ class Recursion(VGroup):
             raise RecursionError("divide_array probably called too many times!")
 
         visit_end_animations = Wait(0) 
-        if self.current_subproblem is not None:
+        if self.current_subproblem:
             visit_end_animations = self.call_callback_hooks("on_visit_end") 
         
         self.current_subproblem = RecursiveArray(self.elements[i:j+1], parent=parent)
@@ -38,7 +38,7 @@ class Recursion(VGroup):
 
         visit_start_animations = self.call_callback_hooks("on_visit_start")
 
-        if parent is not None:
+        if parent:
             parent.children.append(self.current_subproblem)
             parent_arrow = CurvedArrow(start_point=parent.get_bottom(),end_point=self.current_subproblem.get_top(),angle=0)
             arrow_animation = self.current_subproblem.set_parent_arrow(parent_arrow)
@@ -50,7 +50,7 @@ class Recursion(VGroup):
                           AnimationGroup(self.current_subproblem.create(), visit_start_animations, arrow_animation), 
                           visit_start_animations)
 
-    def traverse_up(self) -> AnimationGroup:
+    def traverse_up(self) -> AnimationGroup | None:
         """Emulates the upwards traversal of a recursive return statement. Use before returning in base case or inductive step."""
         visit_end_animations = self.call_callback_hooks("on_visit_end")
         parent = self.current_subproblem.parent

@@ -7,7 +7,7 @@ from Animator import Animator
 from Recursion.Recursion import Recursion
 from Windows.CodeWindow import CodeWindow
 from Recursion.PositionStrategies import TwoChildrenPositioner
-from Callbacks.ElementCallbacks import displayCodeRecursionCallback, zoomToElementCallback, zoomToRecursionCallback
+from Callbacks.ElementCallbacks import displayCodeRecursionCallback, zoomToElementCallback
 code = """
 class Solution(object):
     def maxProfit(self, prices):

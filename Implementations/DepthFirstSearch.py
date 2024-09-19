@@ -6,7 +6,7 @@ from ArrayPointer import Pointer
 from Animator import Animator
 from Recursion.Recursion import Recursion
 from Recursion.BinaryTree import BinaryTree
-from Elements.TreeElement import TreeNode
+from Elements.TreeElement import TreeElement
 from Recursion.PositionStrategies import BinaryTreePositioner
 from Utils.TreeDS import binary_tree_from_list
 from TreeIndicator import Indicator
@@ -44,7 +44,7 @@ class DFSScene(MovingCameraScene):
             if v is None:
                 elements.append(None)
             else:
-                elements.append(TreeNode(v, Circle(), self.element_style))
+                elements.append(TreeElement(v, Circle(), self.element_style))
         zte_callback = zoomToElementCallback(self.camera)
         dce_callback = displayCodeElementCallback(self.code_window, LEFT)
         elements[1].callbacks = [zte_callback, dce_callback]

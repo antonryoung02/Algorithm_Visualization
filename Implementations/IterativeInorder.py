@@ -8,7 +8,7 @@ from Recursion.Recursion import Recursion
 from Utils.TreeDS import *
 from Recursion.BinaryTree import BinaryTree
 from Recursion.PositionStrategies import BinaryTreePositioner
-from Elements.TreeElement import TreeNode
+from Elements.TreeElement import TreeElement
 from TreeIndicator import Indicator 
 code = """
 
@@ -28,7 +28,7 @@ class IterativeInorderScene(MovingCameraScene):
         array_data = [1,2,3,4,5,8,6,7,9]
         root = binary_tree_from_list(array_data)
         
-        elements = [TreeNode(i, shape=Circle(), style=self.element_style) for i in array_data]
+        elements = [TreeElement(i, shape=Circle(), style=self.element_style) for i in array_data]
         positioner = BinaryTreePositioner(vertical_spacing=1.5)
         tree = BinaryTree(elements, positioner)
         curr = Indicator(tree, Circle(), self.indicator_style)

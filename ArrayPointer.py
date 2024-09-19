@@ -14,7 +14,7 @@ class Pointer(VGroup):
         self.add(self.pointer)
         self.set_style(style)
 
-    def create(self, index=0) -> AnimationGroup:
+    def create(self, index=0) -> AnimationGroup | None:
         """Initializes visual and text, returns init animations"""
         element = self.get_element_at_index(index)
         self.current_element = element
@@ -65,7 +65,7 @@ class Pointer(VGroup):
         self.text = new_text
         return Succession(visit_end_animations, AnimationGroup(pointer_animation, text_animation), visit_start_animations)
 
-    def delete(self) -> AnimationGroup:
+    def delete(self) -> AnimationGroup | None:
         """Pointer removes itself from the scene"""
         visit_end_animations = Wait(0)
         if self.current_element:

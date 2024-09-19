@@ -1,8 +1,9 @@
 from manim import *
 from Arrays.Array import Array
 from Arrays.AbstractArray import AbstractArray
-from Elements.Element import Element
+from Elements.Element import Elemen
 
+ #TODO FIX
 class LinkedList(AbstractArray):
     def __init__(self, elements, **kwargs):
         super().__init__(**kwargs)

@@ -1,5 +1,4 @@
 from Arrays.RecursiveArray import RecursiveArray
-from Elements.Element import Element
 from manim import *
 from Recursion.PositionStrategies import BinaryTreePositioner
 
