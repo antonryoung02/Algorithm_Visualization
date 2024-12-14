@@ -2,6 +2,8 @@
 
 This project contains several datatype/algorithm classes such as Array, LinkedList, Recursion, Trees, Graphs, and soon to be more. Integrating this framework with python algorithms creates a visualization using the manim library. The goal was to provide more intuitive and engaging explanations for data structures and leetcode-style algorithms.
 
+See code for implementations of some algorithms in the [implementations directory](./Implementations)
+
 ## Demos
 
 ### Merge Sort
